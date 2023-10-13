@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,16 +7,24 @@ namespace Golf
 {
     public class GolfMovement : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
+        private Stroke _currentStroke;
+        public void HitBall(Stroke stroke)
         {
-
+            
+            //applie the forces to the ball
+            stroke.Status = StrokeStatus.InMotion;
+            
+            //the stroke might be applied during aiming.
+            _currentStroke = stroke;
         }
 
-        // Update is called once per frame
-        void Update()
+        private void Update()
         {
-
+            if (_currentStroke.Status == StrokeStatus.InMotion)
+            {
+                //if ball stops moving
+                //  //set the stroke to finished.
+            }
         }
     }
 }
