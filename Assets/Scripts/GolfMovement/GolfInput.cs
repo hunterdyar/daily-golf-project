@@ -33,6 +33,16 @@ namespace Golf
             
             _golfMovement.CurrentStroke.startPosition = transform.position;
             _golfMovement.CurrentStroke.inputPower = 1;//drag and set this.
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                _golfMovement.HitBall();
+            }
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                _golfMovement.Caddy.CycleClub(1);
+            }
         }
     }
 }

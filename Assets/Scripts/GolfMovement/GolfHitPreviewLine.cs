@@ -34,11 +34,6 @@ namespace Golf
 				_lineRenderer.SetPosition(1,
 					_golfMovement.CurrentStroke.startPosition + _golfMovement.CurrentStroke.RealAimDir);
 
-
-				if (Input.GetMouseButtonDown(0))
-				{
-					_golfMovement.HitBall();
-				}
 			}
 		}
 	}

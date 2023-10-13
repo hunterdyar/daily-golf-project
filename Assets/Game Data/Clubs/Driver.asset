@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: afa767be74ad47e08db23ab8f9f31227, type: 3}
-  m_Name: Iron
+  m_Name: Driver
   m_EditorClassIdentifier: 
-  displayName: Iron
-  power: 4
-  angle: 45
+  displayName: Driver
+  power: 100
+  angle: 25

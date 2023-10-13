@@ -14,6 +14,8 @@ namespace Golf
         [ReadOnly]
         private Stroke _currentStroke;
         private Rigidbody _rigidbody;
+
+        public ActiveGolfConfiguration Caddy => _caddy;
         [SerializeField]
         private ActiveGolfConfiguration _caddy;
 
@@ -26,6 +28,23 @@ namespace Golf
             _rigidbody = GetComponent<Rigidbody>();
         }
 
+        private void OnEnable()
+        {
+            _caddy.OnSelectedClubChanged += OnSelectedClubChanged;
+        }
+
+        private void OnDisable()
+        {
+            _caddy.OnSelectedClubChanged -= OnSelectedClubChanged;
+        }
+
+        //instead, should we pass the caddy to the stroke? 
+        //we don't, because the stroke serves as our historical data after the hit.
+        private void OnSelectedClubChanged(Club club)
+        {
+            _currentStroke.club = club;
+        }
+
         private void Start()
         {
             //I save awake for configuring scriptableobjects, (like loading from save files) so I try not to read data until start.
@@ -36,7 +55,7 @@ namespace Golf
         {
             //applies the forces to the ball
             _currentStroke.Status = StrokeStatus.InMotion;
-            _rigidbody.AddForce(_currentStroke.GetForce(),ForceMode.Impulse);
+            _rigidbody.AddForce(_currentStroke.GetForce(),ForceMode.VelocityChange);
         }
         
 

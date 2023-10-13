@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clubs:
   - {fileID: 11400000, guid: cf459e7ab967e774faec3e96c69f9fa1, type: 2}
+  - {fileID: 11400000, guid: ea5883def424bf54e90b15b5e5d1adf0, type: 2}
+  - {fileID: 11400000, guid: 2eeb9fed0e386c04fbb459109d03b3e3, type: 2}
