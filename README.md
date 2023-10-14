@@ -14,6 +14,9 @@ The goal of this game is to use data-oriented design patterns and modular coding
 
 The 'Caddy' is a scriptableObject (ActiveGolfConfiguration) that stores the current golfing setup: the clubs, etc.
 
+### Input
+Current code is all temp old system stuff, but at least stuffed away in the GolfInput.cs file. We pull the aim direction from the camera, basically.
+
 ### UI
 HUD reads from the 'caddy'. With the scriptable object, it is completely independent from any other element.
 in-scene UI is handled by the trajectory prediction system.
@@ -22,6 +25,10 @@ in-scene UI is handled by the trajectory prediction system.
 Basically entirelly in a single script/child of the player, GolfHitPreviewLine.cs.
 
 Uses [multi-scene physics](https://docs.unity3d.com/Manual/physics-multi-scene.html) to simulate the balls path and draw a line for each tick of that simulation. See the [TNTC](https://www.youtube.com/watch?v=4VUmhuhkELk) video for a breakdown of the technique.
+
+### Camera Control
+Currently I use Cinemachine. The FreeLook camera is doing most of the work for me. 
+A todo will be better (more precise) aiming with a 'dead zone' before the camera starts panning. But I don't really know how I want the camera input to work yet.
 
 ### Custom Attributes
 [ReadOnly] and [Layer] are not attributes that are built into Unity (although they should be).
