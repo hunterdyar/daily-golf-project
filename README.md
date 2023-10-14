@@ -17,6 +17,8 @@ The 'Caddy' is a scriptableObject (ActiveGolfConfiguration) that stores the curr
 ### Input
 Uses new input system. InputActins have a c# class generated, and interfacing with the input actions is done entirely by an InputReader scriptable object. The rest of the project only interfaces with this, which provides convenient actions, process functions, and read-only properties. It keeps the rest of the code agnostic of which input system we are using. It lets us send 'fake' inputs in a non-jank way easily, either with inspector scripts or with public functions. 
 
+This technique is inspired from Unit's own '[modular game architecture with scriptableobjects](https://resources.unity.com/games/create-modular-game-architecture-with-scriptable-objects-ebook?ungated=true)' ebook ([repo](https://github.com/UnityTechnologies/PaddleGameSO)).
+
 > Basically, the input reader serves the role of the [PlayerInput](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.8/manual/PlayerInput.html) component.
 
 Using a scriptableobject to "wrap" an inputactions has the further advantages.
