@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -16,8 +17,12 @@ namespace Golf
 		public Vector3 RealAimDir => GetRealAimDir();
 		//preview data.
 		//state
-		public Stroke(Transform ball, Club club)
+
+		public Rigidbody BallRB => _ball;
+		private Rigidbody _ball;
+		public Stroke(Rigidbody ball, Club club)
 		{
+			_ball = ball;
 			this.club = club;
 			Status = StrokeStatus.NotTaken;
 			this.startPosition = ball.position;
@@ -36,7 +41,14 @@ namespace Golf
 
 		public Vector3 GetForce()
 		{
-			return GetRealAimDir() * inputPower * 3;
+			Vector3 vel = GetRealAimDir() * inputPower * club.power;
+			return vel;
+			return (vel / Time.fixedDeltaTime) * _ball.mass;
+			//return (GetRealAimDir() * inputPower / rigidbody.mass) / Time.fixedDeltaTime;
+
+			// v = (f / m) * dt;
+			// v / dt = f / m;
+			// (v/dt)*m
 		}
 	}
 }

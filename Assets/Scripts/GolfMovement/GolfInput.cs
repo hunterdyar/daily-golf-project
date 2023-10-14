@@ -12,7 +12,6 @@ namespace Golf
     {
         private GolfMovement _golfMovement;
         private Camera _camera;
-        
         private void Awake()
         {
             _golfMovement = GetComponent<GolfMovement>();
@@ -34,7 +33,7 @@ namespace Golf
             _golfMovement.CurrentStroke.startPosition = transform.position;
             _golfMovement.CurrentStroke.inputPower = 1;//drag and set this.
 
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 _golfMovement.HitBall();
             }

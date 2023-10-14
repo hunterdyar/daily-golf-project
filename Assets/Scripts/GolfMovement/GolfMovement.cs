@@ -13,6 +13,8 @@ namespace Golf
         [SerializeField]
         [ReadOnly]
         private Stroke _currentStroke;
+
+        public Rigidbody Rigidbody => _rigidbody;
         private Rigidbody _rigidbody;
 
         public ActiveGolfConfiguration Caddy => _caddy;
@@ -48,14 +50,14 @@ namespace Golf
         private void Start()
         {
             //I save awake for configuring scriptableobjects, (like loading from save files) so I try not to read data until start.
-            _currentStroke = new Stroke(transform, _caddy.SelectedClub);
+            _currentStroke = new Stroke(_rigidbody, _caddy.SelectedClub);
         }
 
         public void HitBall()
         {
             //applies the forces to the ball
             _currentStroke.Status = StrokeStatus.InMotion;
-            _rigidbody.AddForce(_currentStroke.GetForce(),ForceMode.VelocityChange);
+            _rigidbody.AddForce(_currentStroke.GetForce(),ForceMode.Impulse);
         }
         
 
@@ -78,7 +80,7 @@ namespace Golf
                     //if status was inMotion, add to list.
                     //if status was NotTaken, then we are in debug or first shot testing.
                     _currentStroke.Status = StrokeStatus.Taken;
-                    _currentStroke = new Stroke(transform, _caddy.SelectedClub);
+                    _currentStroke = new Stroke(_rigidbody, _caddy.SelectedClub);
                     _currentStroke.Status = StrokeStatus.Aiming;
                     //Update
                 }
