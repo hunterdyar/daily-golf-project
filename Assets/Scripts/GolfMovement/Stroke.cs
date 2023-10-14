@@ -41,9 +41,9 @@ namespace Golf
 
 		public Vector3 GetForce()
 		{
-			Vector3 vel = GetRealAimDir() * inputPower * club.power;
+			Vector3 vel = GetRealAimDir() * (inputPower * club.power);
 			return vel;
-			return (vel / Time.fixedDeltaTime) * _ball.mass;
+			//return (vel / Time.fixedDeltaTime) * _ball.mass;
 			//return (GetRealAimDir() * inputPower / rigidbody.mass) / Time.fixedDeltaTime;
 
 			// v = (f / m) * dt;

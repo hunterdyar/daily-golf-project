@@ -80,7 +80,7 @@ namespace Golf
 			
 			//Next we add a rigidbody and duplicate it. I assume a rb is not on the same object as the collider (ie: a parent)
 			_simulatedRB = _simulatedBall.AddComponent<Rigidbody>();
-			var rb = _golfMovement.Rigidbody;
+			var rb = _golfMovement.GetComponent<Rigidbody>();//golfMovement has a public Rigidbody, but this is being called in awake (too) and it may not have gotten that reference yet.
 			//hey wouldn't it be great if this function existed? It does now. see extensions.cs
 			_simulatedRB.CopyPropertiesFrom(rb);
 			

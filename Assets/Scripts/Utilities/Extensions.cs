@@ -7,6 +7,11 @@ namespace Utilities
 	{
 		public static void CopyPropertiesFrom(this Rigidbody rb, Rigidbody rigidbody)
 		{
+			if (rigidbody == null)
+			{
+				Debug.LogWarning("Can't copy properties from null rigidbody.",rb);
+				return;
+			}
 			rb.mass = rigidbody.mass;
 			rb.drag = rigidbody.drag;
 			rb.angularDrag = rigidbody.angularDrag;

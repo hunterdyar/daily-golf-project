@@ -8,6 +8,7 @@ namespace Golf
 {
     public class GolfMovement : MonoBehaviour
     {
+        public Action OnNewStroke;
         public Stroke CurrentStroke => _currentStroke;
 
         [SerializeField]
@@ -51,6 +52,7 @@ namespace Golf
         {
             //I save awake for configuring scriptableobjects, (like loading from save files) so I try not to read data until start.
             _currentStroke = new Stroke(_rigidbody, _caddy.SelectedClub);
+            OnNewStroke?.Invoke();
         }
 
         public void HitBall()
@@ -75,14 +77,13 @@ namespace Golf
                 _currentStroke.Tick(Time.fixedDeltaTime);
                 if (_currentStroke.hitTimer > 0.75f && _rigidbody.velocity.sqrMagnitude < 0.01f)
                 {
-                    Debug.Log("Reset Hit");
-
                     //if status was inMotion, add to list.
                     //if status was NotTaken, then we are in debug or first shot testing.
                     _currentStroke.Status = StrokeStatus.Taken;
                     _currentStroke = new Stroke(_rigidbody, _caddy.SelectedClub);
                     _currentStroke.Status = StrokeStatus.Aiming;
                     //Update
+                    OnNewStroke?.Invoke();
                 }
             }
         }

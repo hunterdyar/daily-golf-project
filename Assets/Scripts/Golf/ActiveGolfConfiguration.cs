@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Utilities.ReadOnlyAttribute;
 
 namespace Golf
 {
@@ -10,6 +11,9 @@ namespace Golf
 		public Action<Club> OnSelectedClubChanged;
 
 		[SerializeField] private List<Club> clubs;
+		
+		//we don't actually serialize this to edit it, but this lets us preview in the inspector for debugging.
+		[SerializeField,ReadOnly]
 		private int selectedClubIndex = 0;
 		public Club SelectedClub => clubs[selectedClubIndex];
 
