@@ -64,7 +64,10 @@ namespace Golf
 
 		public void OnSwing(InputAction.CallbackContext context)
 		{
-			Swing?.Invoke();
+			if (context.performed)
+			{
+				Swing?.Invoke();
+			}
 		}
 
 		public void OnLook(InputAction.CallbackContext context)
