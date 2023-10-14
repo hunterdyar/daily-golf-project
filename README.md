@@ -55,4 +55,5 @@ A todo will be better (more precise) aiming with a 'dead zone' before the camera
 I implemented these as custom attributes, see the utilities folder. Each one is in it's own folder/namespace because I imagine you may want to directly copy them into your own projects. Go for it. That's what I do.
 
 ### Map Generation
-todo. Will be pulling from techniques used in my [2DRoguelikeLevelGenerator](https://github.com/hunterdyar/2DRougelikeLevelGenerator/) project.
+Map generation happens in a Generator scriptable Object (generator.cs). This creates a random level and saves it as a sub-asset, as a Texture2D. So anything can just read those files. 
+MapGenerator.cs is a simple script to listen for generation (we can regenerate levels at runtime clicking a button in the inspector, very helpful for testing) that spawns in cubes on a grid.
