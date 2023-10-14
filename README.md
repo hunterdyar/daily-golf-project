@@ -15,7 +15,11 @@ The goal of this game is to use data-oriented design patterns and modular coding
 The 'Caddy' is a scriptableObject (ActiveGolfConfiguration) that stores the current golfing setup: the clubs, etc.
 
 ### Input
-Current code is all temp old system stuff, but at least stuffed away in the GolfInput.cs file. We pull the aim direction from the camera, basically.
+Uses new input system. InputActins have a c# class generated, and interfacing with the input actions is done entirely by an InputReader scriptable object. THe rest of the code base only interfaces with this, which provides convenient actions, process functions, and read-only properties. It keeps the rest of the codebase agnostic of which input system we are using. It lets us send 'fake' inputs in a non-jank way easily, either with inspector scripts or with public functions.
+
+Using a scriptableobject to "wrap" an inputactions has the further advantages of being a convenient place to store input settings, and a place to put custom inspector doodads to preview/read the data for debugging, and fire off test actions.  The disadvantages are that it's a little overkill for this project, a public reference to inputaction assets is certainly fine for a game of this scale. Or, we could do it the same, but provide the data as static actions and floats! I don't use statics because it lets me use multiple scriptable objects to store different settings instances for testing and swapping out easily. Especially useful for a project in source control.
+
+Really, I just like this method for the sake of the rest of the code base. Doing a lot of XR development, it's always useful to have test buttons in the scene (although not needed for a project like this one). I like completely compartmentalizing input away - it tends to be a place where complexity grows over time, and lots of little input handling scripts has always been a headache.
 
 ### UI
 HUD reads from the 'caddy'. With the scriptable object, it is completely independent from any other element.
