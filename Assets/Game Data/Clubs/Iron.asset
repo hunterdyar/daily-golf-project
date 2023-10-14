@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Iron
   m_EditorClassIdentifier: 
   displayName: Iron
-  power: 5.51
+  power: 5
   angle: 45

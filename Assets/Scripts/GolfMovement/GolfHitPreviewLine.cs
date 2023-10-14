@@ -124,13 +124,11 @@ namespace Golf
 				_previousSimulatedForce = simulationForce;
 			}
 		}
-		private void UpdateTrajectoryStraight()
+
+		private void OnDestroy()
 		{
-			_lineRenderer.SetPosition(0, _golfMovement.CurrentStroke.startPosition);
-			_lineRenderer.SetPosition(1,
-				_golfMovement.CurrentStroke.startPosition + _golfMovement.CurrentStroke.RealAimDir);
-			
-			
+			//clean up after ourselves. If the game reloads, we don't want a thousand scenes lying around, or hanging out on menu's or what-have-you.
+			SceneManager.UnloadSceneAsync(_predictionScene);
 		}
 	}
 }
