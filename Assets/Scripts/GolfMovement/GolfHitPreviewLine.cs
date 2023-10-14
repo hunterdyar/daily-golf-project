@@ -8,6 +8,7 @@ using Utilities.LayerAttribute;
 
 namespace Golf
 {
+	[RequireComponent(typeof(LineRenderer))]
 	public class GolfHitPreviewLine : MonoBehaviour
 	{
 		//References
