@@ -25,18 +25,14 @@ namespace Golf
         private void OnEnable()
         {
             _inputReader.Swing += Swing;
-            _inputReader.CycleClubRight += CycleClubRight;
-            _inputReader.CycleClubLeft += CycleClubLeft;
+            _inputReader.CycleClub += CycleClub;
             _golfMovement.OnNewStroke += OnNewStroke;
         }
-
-       
-
+        
         private void OnDisable()
         {
             _inputReader.Swing -= Swing;
-            _inputReader.CycleClubRight -= CycleClubRight;
-            _inputReader.CycleClubLeft -= CycleClubLeft;
+            _inputReader.CycleClub -= CycleClub;
             _golfMovement.OnNewStroke -= OnNewStroke;
         }
 
@@ -68,21 +64,14 @@ namespace Golf
         //Because the caddy is directly controlled by the input reader, we COULD directly reference it!
         //except we are using this object for input state. So we disable the ability to change clubs unless we are aiming.
         //also so we aren't cycling clubs while in the... like, menu....
-        private void CycleClubRight()
+        private void CycleClub(int delta)
         {
             if (_golfMovement.IsAiming)
             {
-                _golfMovement.Caddy.CycleClub(1);
+                _golfMovement.Caddy.CycleClub(delta);
             }
         }
-
-        private void CycleClubLeft()
-        {
-            if (_golfMovement.IsAiming)
-            {
-                _golfMovement.Caddy.CycleClub(-1);
-            }
-        }
+        
 
         private void OnNewStroke()
         {

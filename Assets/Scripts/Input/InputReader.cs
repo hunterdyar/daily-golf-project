@@ -1,4 +1,6 @@
 ﻿using System;
+using UnityEditor;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Utilities.ReadOnlyAttribute;
@@ -11,22 +13,22 @@ namespace Golf
 		private GolfControls _golfControls;
 
 		public Action Swing;
-		public Action CycleClubRight;
-		public Action CycleClubLeft;
-		
-		
+		public Action<int>CycleClub;
+		public Action OnAnyPropertyUpdated;
 		public Vector2 Look => _look;
-		[Header("Debug")]
-		[SerializeField, ReadOnly] private Vector2 _look;
+		[SerializeField]
+		private Vector2 _look;
 
 		public float Aim => _aim;
-		[SerializeField, ReadOnly] private float _aim;
+		[SerializeField]
+		private float _aim;
 
 		public float PowerDelta => _powerDelta;
-		[SerializeField, ReadOnly] private float _powerDelta;
+		[SerializeField]
+		private float _powerDelta;
 
-		[Header("Input Settings")] [SerializeField]
-		private float _aimSpeed;
+		[SerializeField] private float _aimSpeed;
+
 		private void OnEnable()
 		{
 			_golfControls = new GolfControls();
@@ -54,7 +56,12 @@ namespace Golf
 
 		public void OnAim(InputAction.CallbackContext context)
 		{
-			_aim = context.ReadValue<float>();
+			float aim = context.ReadValue<float>();
+			if (_aim != aim)
+			{
+				_aim = aim;
+				OnAnyPropertyUpdated?.Invoke();
+			}
 		}
 
 		public void OnPower(InputAction.CallbackContext context)
@@ -66,7 +73,7 @@ namespace Golf
 		{
 			if (context.performed)
 			{
-				Swing?.Invoke();
+				DoSwing();
 			}
 		}
 
@@ -79,7 +86,7 @@ namespace Golf
 		{
 			if (context.performed)
 			{
-				CycleClubRight?.Invoke();
+				DoCycleClubRight();
 			}
 		}
 
@@ -87,8 +94,24 @@ namespace Golf
 		{
 			if (context.performed)
 			{
-				CycleClubLeft?.Invoke();
+				DoCycleClubLeft();
 			}
 		}
-	}
+
+		//wrapper so we can call this for fake-input events in the inspector, tutorials, etc.
+		public void DoSwing()
+		{
+			Swing?.Invoke();
+		}
+
+		public void DoCycleClubRight()
+		{
+			CycleClub?.Invoke(1);
+		}
+
+		public void DoCycleClubLeft()
+		{
+			CycleClub?.Invoke(-1);
+		}
+}
 }
