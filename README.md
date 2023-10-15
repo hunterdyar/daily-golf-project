@@ -3,6 +3,8 @@ Unity example project demonstrating modular project architecture. A tiny golf ga
 
 The goal of this game is to use data-oriented design patterns and modular coding patterns to allow the different systems to exist independently, and be built up over time.
 
+![A gif of the island continuously regenerating](Documentation/island_gen_1.gif)
+
 ## Game Architecture Patterns Being Used
 - Data-Oriented Design. Primarily through storing game data in ScriptableObjets. See the [still-relevant 2017 Unite talk from Ryan Hipple](https://www.youtube.com/watch?v=raQ3iHhE_Kk).
 - Actions. Using events ([static](https://guidebook.hdyar.com/docs/programming/advanced/static-objects-and-unity/) or on scriptableObjects) to decouple dependencies. See my [Event Systems in Unity](https://guidebook.hdyar.com/docs/programming/architecture/event-systems/) page.
