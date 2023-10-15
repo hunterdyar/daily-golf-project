@@ -4,7 +4,7 @@ namespace Utilities.Kernels
 {
 	public static class KernelUtility
 	{
-		public static float[,] BoxKernal = new[,]
+		public static readonly float[,] BoxKernal = new[,]
 		{
 			{ 1 / 9f, 1 / 9f, 1 / 9f },
 			{ 1 / 9f, 1 / 9f, 1 / 9f },

@@ -9,13 +9,13 @@ namespace MapGen
 	{
 		public Generator _generator;
 		public GameObject GroundPrefab;
+		public GameObject TeePrefab;
+
 		public float scale = 1;
 		public AnimationCurve perlinHeightCurve;
 		public int steps = 3;
 		public bool GenerateOnStart = true;
-		//todo: move this to generator.
-		[Range(0,1)]
-		public float waterLevel;
+
 		private void Start()
 		{
 			if (GenerateOnStart)
@@ -52,16 +52,18 @@ namespace MapGen
 				}
 			}
 
-			Vector2Int playerPosition = new Vector2Int(Random.Range(0,tex.width), Random.Range(0, tex.height));
-			while (tex.GetPixel(playerPosition.x, playerPosition.y).grayscale < 0.1f)
-			{ 
-				playerPosition = new Vector2Int(Random.Range(0, tex.width), Random.Range(0, tex.height));
-			}
-
+			Vector2Int playerPosition = _generator.teePositions[0];
 			var player = GameObject.FindObjectOfType<GolfMovement>();
 			 var pos = new Vector3(playerPosition.x, (steps + 1) * scale, playerPosition.y);
 			 //took me a while to figure out why setting transform directly didn't work... dang rigidbodies...
 			 player.GetComponent<Rigidbody>().position = transform.TransformPoint(pos);
+
+			 for (int i = 1; i < _generator.teePositions.Count; i++)
+			 {
+				 var o = Instantiate(TeePrefab, transform);
+				 o.transform.position = new Vector3(_generator.teePositions[i].x * scale, GetHeight((tex.GetPixel(_generator.teePositions[i].x, _generator.teePositions[i].y).grayscale))+scale, _generator.teePositions[i].y * scale);
+			 }
+			 
 		}
 
 		private float GetHeight(float input)
@@ -74,7 +76,7 @@ namespace MapGen
 		private GameObject ColorToPrefab(Color color)
 		{
 			float g = color.grayscale;
-			if (g > waterLevel)
+			if (g > 0.01f)
 			{
 				return GroundPrefab;
 			}

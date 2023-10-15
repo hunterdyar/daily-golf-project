@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using UnityEditor;
@@ -13,25 +14,25 @@ namespace MapGen
 	{
 		public Action<Texture2D> OnGenerate;
 		public Vector2Int Size => size;
+		public int numberTees = 5;
 		[SerializeField] private Vector2Int size = new Vector2Int(10, 10);
 		[SerializeField] private float perlinScale;
 		[SerializeField] private AnimationCurve heightCurve;
+		[Range(0, 1)] public float waterLevel;
 		public Texture2D MapImage => _texture2D;
 		private Texture2D _texture2D;
 
 		//just fell silly to do this one a hundred times. No noticable difference when i profiled it.
-		private float sqrtTwo;
-		
-		
+		private readonly float sqrtTwo = Mathf.Sqrt(2);
+
+		public List<Vector2Int> teePositions;
 
 		[Header("Generation Settings")] public int initialCellularSteps = 10;
 		[ContextMenu("Generate")]
 
 		public void Generate()
 		{
-			//caching and seeds
-			sqrtTwo = Mathf.Sqrt(2);
-			
+			//seeds?
 			
 			SaveTexture2D();//creates if it is null. Creates a new one at the correct size if size has changed.
 
@@ -50,15 +51,101 @@ namespace MapGen
 
 			PerlinScale(Random.Range(0,1000f));
 			CenterShapeGreyscale(0.1f);
-			//CenterShapeGreyscale(0.25f);
 
 			_texture2D.Apply();
+
+			//apply water level...
+			ApplyWaterLevelGreyscale(waterLevel,Color.black);
+			
+			CalculateTeePositions();
+			
 			SaveTexture2D();
+			
 			
 			OnGenerate?.Invoke(_texture2D);
 		}
 
-		
+		private void ApplyWaterLevelGreyscale(float waterLevel,Color color)
+		{
+			for (int x = 0; x < size.x; x++)
+			{
+				for (int y = 0; y < size.y; y++)
+				{
+					if (_texture2D.GetPixel(x, y).grayscale < waterLevel)
+					{
+						_texture2D.SetPixel(x,y, color);
+					}
+				}
+			}
+		}
+
+		private void CalculateTeePositions()
+		{
+			teePositions = new List<Vector2Int>();
+			if (numberTees <= 0)
+			{
+				return;
+			}
+
+			int triesBeforeRadiusShrink = size.x*100;
+			float radius = Mathf.Sqrt(size.x * size.y);
+			int totalTries = 0;
+			int giveUp = 1000;
+			while (teePositions.Count < numberTees && totalTries < giveUp)
+			{
+				int sampleTries = 0;
+				while (sampleTries < triesBeforeRadiusShrink)
+				{
+					var testingPos = GetRandomLandPoint();
+					bool validTest = true;
+					foreach (var position in teePositions)
+					{
+						if (Vector2Int.Distance(position, testingPos) < radius)
+						{
+							//we also have to check that the tee isn't on an isoldated island.
+							//I think it will be faster to just generate and validate, and regenerate after, instead of doing the sample in the check.
+							//having a list of islands would be nice anyway to do flood fills on.
+							validTest = false;
+							break;
+						}
+					}
+
+					if (validTest)
+					{
+						teePositions.Add(testingPos);
+						if (teePositions.Count == numberTees)
+						{
+							//possible to add multiple tees on one attempt-before-radius shrink, so check and bail.
+							return;
+						}
+					}
+
+					sampleTries++;
+				}
+
+				totalTries++;
+				radius = radius - 1;
+				radius = Mathf.Max(radius, 0);//clamp
+			}
+		}
+
+		private Vector2Int GetRandomLandPoint(int maxTries = 1000)
+		{
+			int tries = 0;
+			while (tries < maxTries)
+			{
+				Vector2Int p = new Vector2Int(Random.Range(0, size.x), Random.Range(0, size.y));
+				if (_texture2D.GetPixel(p.x, p.y).grayscale > waterLevel)
+				{
+					return p;
+				}
+				tries++;
+			}
+
+			Debug.LogWarning("Couldn't get random land point.");
+			return Vector2Int.zero;
+		}
+
 		private void SetBordersToColor(Color color)
 		{
 			for (int x = 0; x < size.x; x++)

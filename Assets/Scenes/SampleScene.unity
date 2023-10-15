@@ -994,7 +994,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1109735858}
-  m_LocalRotation: {x: 0.3944903, y: -0.5816171, z: 0.3825236, w: 0.5998122}
+  m_LocalRotation: {x: 0.39449027, y: -0.5816172, z: 0.38252354, w: 0.59981227}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1088,6 +1088,7 @@ MonoBehaviour:
   _generator: {fileID: 11400000, guid: 03d84967f2c05cc43aabc80239bdf908, type: 2}
   GroundPrefab: {fileID: 1091978313851992760, guid: aa50e010766e1f24983750fb155f3e7c,
     type: 3}
+  TeePrefab: {fileID: 14044861037011503, guid: d94b1a1763c9e5d45bfd81ac742a40c9, type: 3}
   scale: 1
   perlinHeightCurve:
     serializedVersion: 2
@@ -1113,9 +1114,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  steps: 5
+  steps: 4
   GenerateOnStart: 1
-  waterLevel: 0.112
 --- !u!1 &1624439232
 GameObject:
   m_ObjectHideFlags: 0
