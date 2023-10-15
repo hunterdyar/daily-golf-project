@@ -10,9 +10,12 @@ namespace MapGen
 		public Generator _generator;
 		public GameObject GroundPrefab;
 		public float scale = 1;
+		public AnimationCurve perlinHeightCurve;
 		public int steps = 3;
 		public bool GenerateOnStart = true;
-
+		//todo: move this to generator.
+		[Range(0,1)]
+		public float waterLevel;
 		private void Start()
 		{
 			if (GenerateOnStart)
@@ -71,7 +74,7 @@ namespace MapGen
 		private GameObject ColorToPrefab(Color color)
 		{
 			float g = color.grayscale;
-			if (g > 0.1f)
+			if (g > waterLevel)
 			{
 				return GroundPrefab;
 			}

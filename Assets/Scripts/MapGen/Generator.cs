@@ -12,16 +12,24 @@ namespace MapGen
 	{
 		public Action<Texture2D> OnGenerate;
 		public Vector2Int Size => size;
-		[SerializeField] private Vector2Int size = new Vector2Int(10,10);
+		[SerializeField] private Vector2Int size = new Vector2Int(10, 10);
 		[SerializeField] private float perlinScale;
+		[SerializeField] private AnimationCurve heightCurve;
 		public Texture2D MapImage => _texture2D;
 		private Texture2D _texture2D;
+
+		//just fell silly to do this one a hundred times. No noticable difference when i profiled it.
+		private float sqrtTwo;
 
 		[Header("Generation Settings")] public int initialCellularSteps = 10;
 		[ContextMenu("Generate")]
 
 		public void Generate()
 		{
+			//caching and seeds
+			sqrtTwo = Mathf.Sqrt(2);
+			
+			
 			SaveTexture2D();//creates if it is null. Creates a new one at the correct size if size has changed.
 
 			SetAllToRandomBlackOrWhite();
@@ -29,7 +37,10 @@ namespace MapGen
 			{
 				ProcessFourFive();
 			}
-			PerlinScale(Random.value);
+			
+			//todo: blur our islands using a convolution.
+			
+			PerlinScale(Random.Range(0,1000f));
 			_texture2D.Apply();
 			SaveTexture2D();
 			
@@ -38,14 +49,27 @@ namespace MapGen
 
 		private void PerlinScale(float seed)
 		{
-			for (int i = 0; i < size.x; i++)
+			for (int x = 0; x < size.x; x++)
 			{
-				for (int j = 0; j < size.y; j++)
+				for (int y = 0; y < size.y; y++)
 				{
-					var c = _texture2D.GetPixel(i, j);
+					var c = _texture2D.GetPixel(x, y);
 
-					var perlin = Mathf.Clamp01(Mathf.PerlinNoise(i / perlinScale*size.x+seed, j / perlinScale*size.x+seed));
-					_texture2D.SetPixel(i,j,new Color(c.r* perlin,c.g* perlin,c.b* perlin,1));
+					//Center Bump
+					//can't believe i got stuck on an issue where i didn't know it was doing integer division.
+					var nx = (2 * (x / (float)(size.x))) - 1;
+					var ny = (2 * (y / (float)(size.y))) - 1;
+					float d = Mathf.Min(1, (nx * nx + ny * ny) / sqrtTwo);
+					//d = 1 - (1 - nx * nx) * (1 - ny * ny);
+					
+					var height = Mathf.PerlinNoise(x / perlinScale*size.x+seed, y / perlinScale*size.x+seed);
+					height = (height + (1 - d)) / 2;
+					height = heightCurve.Evaluate(height);
+					//_texture2D.SetPixel(x,y,new Color(c.r* height,c.g* height,c.b* height,1));
+					_texture2D.SetPixel(x, y, new Color((c.r + height) / 2, (c.g + height) / 2, (c.b + height) / 2));
+
+					//_texture2D.SetPixel(x, y, new Color(height,  height, height, 1));
+
 				}
 			}
 		}

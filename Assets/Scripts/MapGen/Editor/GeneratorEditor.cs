@@ -18,6 +18,7 @@ namespace MapGen
 			container.Add(new PropertyField(serializedObject.FindProperty("size")));
 			container.Add(new PropertyField(serializedObject.FindProperty("initialCellularSteps")));
 			container.Add(new PropertyField(serializedObject.FindProperty("perlinScale")));
+			container.Add(new PropertyField(serializedObject.FindProperty("heightCurve")));
 
 			//
 			container.Add(new Label("Generation"));
