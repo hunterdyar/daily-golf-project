@@ -55,5 +55,8 @@ A todo will be better (more precise) aiming with a 'dead zone' before the camera
 I implemented these as custom attributes, see the utilities folder. Each one is in it's own folder/namespace because I imagine you may want to directly copy them into your own projects. Go for it. That's what I do.
 
 ### Map Generation
-Map generation happens in a Generator scriptable Object (generator.cs). This creates a random level and saves it as a sub-asset, as a Texture2D. So anything can just read those files. 
+Map generation happens in a Generator scriptable Object (generator.cs). This creates a random level and saves it as a sub-asset, as a Texture2D. So anything can just read those files. We run a series of processes on the grid of pixels. See [This RedBlogGames](https://www.redblobgames.com/maps/terrain-from-noise/#islands) article for more information.
+
+Tee positions (and player spawn) are done by trying to randomly place non-overlapping circles onto the map on valid locations. We keep trying while decreasing the radius of the circle. It's poisson disk sampling with a search, and I would describe it as "good enough for now". It's slow and could have a tee spawn on an island of just one square.
+
 MapGenerator.cs is a simple script to listen for generation (we can regenerate levels at runtime clicking a button in the inspector, very helpful for testing) that spawns in cubes on a grid.
