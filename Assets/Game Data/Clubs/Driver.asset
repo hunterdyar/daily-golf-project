@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Driver
   m_EditorClassIdentifier: 
   displayName: Driver
-  power: 12
+  power: 30
   angle: 25
