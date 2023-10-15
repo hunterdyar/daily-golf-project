@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using UnityEditor;
 using UnityEngine;
+using Utilities.Kernels;
 using Random = UnityEngine.Random;
 
 namespace MapGen
@@ -20,6 +21,8 @@ namespace MapGen
 
 		//just fell silly to do this one a hundred times. No noticable difference when i profiled it.
 		private float sqrtTwo;
+		
+		
 
 		[Header("Generation Settings")] public int initialCellularSteps = 10;
 		[ContextMenu("Generate")]
@@ -39,12 +42,76 @@ namespace MapGen
 			}
 			
 			//todo: blur our islands using a convolution.
+			ApplyKernel(KernelUtility.BoxKernal);
+			//Kernel breaks our edges, which is fine. We'll just generate more than we need and 'delete' the outer ring.
+			//If the kernal is > 3x3 then I will need to rewrite this to take border thickness.
+			SetBordersToColor(Color.black);
 			
+
 			PerlinScale(Random.Range(0,1000f));
+			CenterShapeGreyscale(0.1f);
+			//CenterShapeGreyscale(0.25f);
+
 			_texture2D.Apply();
 			SaveTexture2D();
 			
 			OnGenerate?.Invoke(_texture2D);
+		}
+
+		
+		private void SetBordersToColor(Color color)
+		{
+			for (int x = 0; x < size.x; x++)
+			{
+				_texture2D.SetPixel(x,0, color);
+				_texture2D.SetPixel(x, size.y-1, color);
+			}
+
+			for (int y = 0; y < size.y; y++)
+			{
+				_texture2D.SetPixel(0, y, color);
+				_texture2D.SetPixel(size.x-1, y, color);
+			}
+		}
+
+		private void ApplyKernel(float[,] kernel)
+		{
+			Texture2D postTex = new Texture2D(size.x, size.y);
+
+			int offset = kernel.GetLength(0) / 2;
+			int kw = kernel.GetLength(0);
+			int kh = kernel.GetLength(1);
+
+			float[] color = new float[3];
+			
+			for (int x = offset; x < size.x - offset; x++)
+			{
+				for (int y = offset; y < size.y - offset; y++)
+				{
+					color[0] = 0;
+					color[1] = 0;
+					color[2] = 0;
+
+					for (int a = 0; a < kw; a++)
+					{
+						for (int b = 0; b < kw; b++)
+						{
+							var xn = x + a - offset;
+							var yn = y + b - offset;
+							Color source = _texture2D.GetPixel(xn, yn);
+							color[0] += source.r * kernel[a,b];
+							color[1] += source.g * kernel[a,b];
+							color[2] += source.b * kernel[a,b];
+						}
+					}
+
+					postTex.SetPixel(x,y,new Color(color[0],color[1],color[2]));
+				}
+			}
+				
+			postTex.Apply();
+			_texture2D.SetPixels(postTex.GetPixels());
+
 		}
 
 		private void PerlinScale(float seed)
@@ -55,15 +122,10 @@ namespace MapGen
 				{
 					var c = _texture2D.GetPixel(x, y);
 
-					//Center Bump
-					//can't believe i got stuck on an issue where i didn't know it was doing integer division.
-					var nx = (2 * (x / (float)(size.x))) - 1;
-					var ny = (2 * (y / (float)(size.y))) - 1;
-					float d = Mathf.Min(1, (nx * nx + ny * ny) / sqrtTwo);
+					
 					//d = 1 - (1 - nx * nx) * (1 - ny * ny);
 					
 					var height = Mathf.PerlinNoise(x / perlinScale*size.x+seed, y / perlinScale*size.x+seed);
-					height = (height + (1 - d)) / 2;
 					height = heightCurve.Evaluate(height);
 					//_texture2D.SetPixel(x,y,new Color(c.r* height,c.g* height,c.b* height,1));
 					_texture2D.SetPixel(x, y, new Color((c.r + height) / 2, (c.g + height) / 2, (c.b + height) / 2));
@@ -74,6 +136,28 @@ namespace MapGen
 			}
 		}
 
+		private void CenterShapeGreyscale(float t)
+		{
+			for (int x = 0; x < size.x; x++)
+			{
+				for (int y = 0; y < size.y; y++)
+				{
+					//Center Bump
+					//can't believe i got stuck on an issue where i didn't know it was doing integer division.
+					float s = 2.5f;//size of island. 2 extends to map edges, larger values compact to center.
+					var nx = (s * (x / (float)(size.x))) - s/2f;
+					var ny = (s * (y / (float)(size.y))) - s/2f;
+					float pow = 2;
+					float d = 1-Mathf.Min(1, (Mathf.Pow(nx,pow) + Mathf.Pow(ny, pow)) / sqrtTwo)-0.2f;
+					//var height = (_texture2D.GetPixel(x,y).grayscale + (1 - d)) / 2;
+					var height = Mathf.Lerp(_texture2D.GetPixel(x, y).grayscale, d, t);
+
+					_texture2D.SetPixel(x, y,new Color(height, height,height));
+
+				}
+			}
+
+		}
 		public void SaveTexture2D()
 		{
 			//if the variable got unassigned the asset still exists, so reset it.
