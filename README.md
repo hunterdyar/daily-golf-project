@@ -19,7 +19,7 @@ The 'Caddy' is a scriptableObject (ActiveGolfConfiguration) that stores the curr
 ### Input
 Uses new input system. InputActins have a c# class generated, and interfacing with the input actions is done entirely by an InputReader scriptable object. The rest of the project only interfaces with this, which provides convenient actions, process functions, and read-only properties. It keeps the rest of the code agnostic of which input system we are using. It lets us send 'fake' inputs in a non-jank way easily, either with inspector scripts or with public functions. 
 
-This technique is inspired from Unit's own '[modular game architecture with scriptableobjects](https://resources.unity.com/games/create-modular-game-architecture-with-scriptable-objects-ebook?ungated=true)' ebook ([repo](https://github.com/UnityTechnologies/PaddleGameSO)).
+This technique is inspired from Unity's own '[modular game architecture with scriptableobjects](https://resources.unity.com/games/create-modular-game-architecture-with-scriptable-objects-ebook?ungated=true)' ebook ([repo](https://github.com/UnityTechnologies/PaddleGameSO)).
 
 > Basically, the input reader serves the role of the [PlayerInput](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.8/manual/PlayerInput.html) component.
 
@@ -30,7 +30,7 @@ Using a scriptableobject to "wrap" an inputactions has the further advantages.
 - Easy handling of input state. We know there is a single source of truth for input (er, except for UI using the EventSystem).
 - Hard to misconfigure - more of the setup is handled automatically. Compare with the 'universal' PlayerInput component.
 
-The disadvantages
+Disadvantages
 - It's overkill for this project.
   - a public reference to inputaction assets is certainly fine for a game of this scale.
   - We could do it the same, but provide the data as static actions and floats! I don't use statics because it lets me use multiple scriptable objects to store different settings instances for testing and swapping out easily. Especially useful for a project in source control.
@@ -57,7 +57,7 @@ A todo will be better (more precise) aiming with a 'dead zone' before the camera
 I implemented these as custom attributes, see the utilities folder. Each one is in it's own folder/namespace because I imagine you may want to directly copy them into your own projects. Go for it. That's what I do.
 
 ### Map Generation
-Map generation happens in a Generator scriptable Object (generator.cs). This creates a random level and saves it as a sub-asset, as a Texture2D. So anything can just read those files. We run a series of processes on the grid of pixels. See [This RedBlogGames](https://www.redblobgames.com/maps/terrain-from-noise/#islands) article for more information.
+Map generation happens in a Generator scriptable Object (generator.cs). This creates a random level and saves it as a sub-asset, as a Texture2D. So anything can just read those files. We run a series of processes on the grid of pixels. See [This RedBlogGames](https://www.redblobgames.com/maps/terrain-from-noise/#islands) article for more information, and my own [2DRoguelikeLevelGenerator](https://github.com/hunterdyar/2DRougelikeLevelGenerator/) package.
 
 Tee positions (and player spawn) are done by trying to randomly place non-overlapping circles onto the map on valid locations. We keep trying while decreasing the radius of the circle. It's poisson disk sampling with a search, and I would describe it as "good enough for now". It's slow and could have a tee spawn on an island of just one square.
 
