@@ -91,12 +91,20 @@ namespace Golf
 		private void Update()
 		{
 			//to test if the sim is any good, comment the following line out. 
-			//_lineRenderer.enabled = _golfMovement.IsAiming;
+			_lineRenderer.enabled = _golfMovement.IsAiming;
 
-			if (_golfMovement.IsAiming)
+			if (ShouldUpdateDisplay())
 			{
 				UpdateTrajectory();
 			}
+		}
+
+		private bool ShouldUpdateDisplay()
+		{
+			//we update all the time for testing, but won't during actual gameplay.
+			return (_golfMovement.CurrentStroke.Status != StrokeStatus.InMotion);
+			
+			//should just be isAiming.
 		}
 
 		private void UpdateTrajectory()

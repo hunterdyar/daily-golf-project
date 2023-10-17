@@ -29,6 +29,9 @@ namespace Golf
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
+            
+            //We are just doing single player for now, but I prefer to go through an updatable reference instead of singleton pattern. Tutorials, cutscenes, and other edge cases.
+            _caddy.SetSelfAsCurrentPlayer(this);
         }
 
         private void OnEnable()

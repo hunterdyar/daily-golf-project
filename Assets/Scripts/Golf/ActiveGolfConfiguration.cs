@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CameraSystem;
 using UnityEngine;
 using Utilities.ReadOnlyAttribute;
 
@@ -8,6 +9,9 @@ namespace Golf
 	[CreateAssetMenu(fileName = "Caddy", menuName = "Golf/Caddy", order = 0)]
 	public class ActiveGolfConfiguration : ScriptableObject
 	{
+		public GolfMovement CurrentPlayer => _currentPlayer;
+		private GolfMovement _currentPlayer;
+		
 		public Action<Club> OnSelectedClubChanged;
 
 		[SerializeField] private List<Club> clubs;
@@ -17,6 +21,10 @@ namespace Golf
 		private int selectedClubIndex = 0;
 		public Club SelectedClub => clubs[selectedClubIndex];
 
+		public void SetSelfAsCurrentPlayer(GolfMovement player)
+		{
+			_currentPlayer = player;
+		}
 		public void CycleClub(int delta = 1)
 		{
 			selectedClubIndex+=delta;
