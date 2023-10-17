@@ -15,15 +15,11 @@ namespace CameraSystem
 		
 		public virtual void Init(CameraSystem system)
 		{
+			_virtualCamera = GetComponentInChildren<CinemachineVirtualCameraBase>();
 			_cameraSystem = system;
 		}
 		public void SetActiveCam(bool active)
 		{
-			if (_virtualCamera == null)
-			{
-				//lazy init... it's not that lazy.
-				_virtualCamera = GetComponentInChildren<CinemachineVirtualCameraBase>();
-			}
 			if (active)
 			{
 				_virtualCamera.Priority = activeCameraAmount + CameraPriority;

@@ -21,6 +21,7 @@ namespace CameraSystem
 			int priority = Int32.MinValue;
 			foreach (var camera in _cameras)
 			{
+				camera.Init(this);
 				camera.SetActiveCam(false);
 				if (camera.CameraPriority > priority)
 				{

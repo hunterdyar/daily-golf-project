@@ -8,10 +8,9 @@ namespace CameraSystem
 	{
 		private GolfMovement Player => Caddy.CurrentPlayer;
 		public InputReader _InputReader;
-
 		
 		public ActiveGolfConfiguration Caddy;
-
+		public Transform LookCam => _virtualCamera.transform;
 
 		public override void Init(CameraSystem system)
 		{
@@ -25,6 +24,7 @@ namespace CameraSystem
 			transform.position = Player.transform.position;
 			
 			transform.Rotate(Vector3.up,_InputReader.Look.x);
+			LookCam.Translate(Vector3.up * _InputReader.Look.y*Time.deltaTime);
 		}
 	}
 }
