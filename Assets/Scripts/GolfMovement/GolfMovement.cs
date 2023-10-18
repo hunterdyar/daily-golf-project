@@ -18,6 +18,8 @@ namespace Golf
         public Rigidbody Rigidbody => _rigidbody;
         private Rigidbody _rigidbody;
 
+        private float timeNotMoving;
+        public float timeNotMovingThreshold = 0.5f;
         public ActiveGolfConfiguration Caddy => _caddy;
         [SerializeField]
         private ActiveGolfConfiguration _caddy;
@@ -55,11 +57,13 @@ namespace Golf
         {
             //I save awake for configuring scriptableobjects, (like loading from save files) so I try not to read data until start.
             _currentStroke = new Stroke(_rigidbody, _caddy.SelectedClub);
+            timeNotMoving = 0;
             OnNewStroke?.Invoke();
         }
 
         public void HitBall()
         {
+            timeNotMoving = 0;
             //applies the forces to the ball
             _currentStroke.Status = StrokeStatus.InMotion;
             _rigidbody.AddForce(_currentStroke.GetForce(),ForceMode.Impulse);
@@ -78,23 +82,22 @@ namespace Golf
             if (_currentStroke.Status == StrokeStatus.InMotion || _currentStroke.Status == StrokeStatus.NotTaken)
             {
                 _currentStroke.Tick(Time.fixedDeltaTime);
-
                 if (IsOutOfBounds())
                 {
                     _currentStroke.Failure();
+                    //todo: move to resetStroke function... in stroke?
                     transform.position = _currentStroke.startPosition;
                     _rigidbody.velocity = Vector3.zero;
                     _rigidbody.angularVelocity = Vector3.zero;
                     StartNewStrokeAndAim();
                 }
-                if (_currentStroke.hitTimer > 0.75f && _rigidbody.velocity.sqrMagnitude < 0.01f)
+                if (_currentStroke.IsStrokeComplete())
                 {
                     //if status was inMotion, add to list.
                     //if status was NotTaken, then we are in debug or first shot testing.
                     _currentStroke.Complete();
                     StartNewStrokeAndAim();
                     //Update
-                    OnNewStroke?.Invoke();
                 }
             }
         }
@@ -103,6 +106,7 @@ namespace Golf
         {
             _currentStroke = new Stroke(_rigidbody, _caddy.SelectedClub);
             _currentStroke.Status = StrokeStatus.Aiming;
+            OnNewStroke?.Invoke();
         }
 
         private bool IsOutOfBounds()

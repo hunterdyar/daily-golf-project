@@ -12,6 +12,7 @@ namespace Golf
 		public Vector3 aimDir;
 		public float inputPower;
 		public float hitTimer;
+		private float timeNotMoving;
 		public Vector3 RealAimDir => GetRealAimDir();
 		//preview data.
 		//state
@@ -31,6 +32,14 @@ namespace Golf
 		public void Tick(float delta)
 		{
 			hitTimer += delta;
+			if (_ball.velocity.magnitude < 0.005f)
+			{
+				timeNotMoving += delta;
+			}
+			else
+			{
+				timeNotMoving = 0;
+			}
 		}
 		private Vector3 GetRealAimDir()
 		{
@@ -60,6 +69,12 @@ namespace Golf
 			endPosition = startPosition;//i guess.
 			//record trap type.
 			Status = StrokeStatus.Failure;
+		}
+
+		public bool IsStrokeComplete()
+		{
+			//todo: manage magic variables. Or at least readonly static.
+			return hitTimer > 0.75f && _ball.velocity.sqrMagnitude < 0.01f && timeNotMoving > 0.15f;
 		}
 	}
 }
