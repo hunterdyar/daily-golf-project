@@ -1,4 +1,5 @@
 ﻿using Cinemachine;
+using Golf;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
@@ -8,6 +9,7 @@ namespace CameraSystem
 	//they are states in a state machine that is the camera system.
 	public class GolfCamera : MonoBehaviour
 	{
+		protected GolfMovement Player => _cameraSystem.Caddy.CurrentPlayer;
 		protected CinemachineVirtualCameraBase _virtualCamera;
 		protected readonly int activeCameraAmount = 40;
 		public int CameraPriority = 0;//we could vcam priorities, but I want a truth value we can reset to after they get modified at runtime.

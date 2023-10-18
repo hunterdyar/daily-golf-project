@@ -4,24 +4,15 @@ using UnityEngine;
 
 namespace CameraSystem
 {
-	public class AimCamera : GolfCamera
+	public class AimCamera : PlayerCamera
 	{
-		private GolfMovement Player => Caddy.CurrentPlayer;
 		public InputReader _InputReader;
-		
-		public ActiveGolfConfiguration Caddy;
 		public Transform LookCam => _virtualCamera.transform;
-
-		public override void Init(CameraSystem system)
-		{
-			base.Init(system);
-			_virtualCamera.LookAt = Player.transform;
-		}
 		
-		private void LateUpdate()
+		
+		protected override void LateUpdate()
 		{
-			//move to player.
-			transform.position = Player.transform.position;
+			base.LateUpdate();
 			
 			transform.Rotate(Vector3.up,_InputReader.Look.x);
 			LookCam.Translate(Vector3.up * _InputReader.Look.y*Time.deltaTime);
