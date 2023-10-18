@@ -11,6 +11,11 @@ namespace Golf
 	{
 		public GolfMovement CurrentPlayer => _currentPlayer;
 		private GolfMovement _currentPlayer;
+
+		public Stroke CurrentStroke => _currentStroke;
+
+		[SerializeField] [ReadOnly]
+		private Stroke _currentStroke;
 		
 		public Action<Club> OnSelectedClubChanged;
 
@@ -21,9 +26,18 @@ namespace Golf
 		private int selectedClubIndex = 0;
 		public Club SelectedClub => clubs[selectedClubIndex];
 
-		public void SetSelfAsCurrentPlayer(GolfMovement player)
+		public void SetCurrentPlayer(GolfMovement player)
 		{
 			_currentPlayer = player;
+		}
+
+		public void StartNewStrokeAndAim(Rigidbody ball)
+		{
+			//if current is not null, add previous to scorecard.
+			
+			_currentStroke = new Stroke(ball, SelectedClub);
+			_currentStroke.Status = StrokeStatus.Aiming;
+			//OnNewStroke?.Invoke();
 		}
 		public void CycleClub(int delta = 1)
 		{

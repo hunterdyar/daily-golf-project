@@ -15,8 +15,9 @@ namespace CameraSystem
 		
 		public virtual void Init(CameraSystem system)
 		{
-			_virtualCamera = GetComponentInChildren<CinemachineVirtualCameraBase>();
 			_cameraSystem = system;
+
+			_virtualCamera = GetComponentInChildren<CinemachineVirtualCameraBase>();
 		}
 		public void SetActiveCam(bool active)
 		{
