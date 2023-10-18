@@ -45,7 +45,8 @@ namespace Golf
             }
             
             _inputReader.AdjustAimVectorTick(ref _golfMovement.CurrentStroke.aimDir);
-            _golfMovement.CurrentStroke.inputPower = Mathf.Clamp01(_golfMovement.CurrentStroke.inputPower + _inputReader.PowerDelta * Time.deltaTime);
+            
+            _golfMovement.CurrentStroke.inputPower = Mathf.Clamp(_golfMovement.CurrentStroke.inputPower + _inputReader.PowerDelta * Time.deltaTime,_golfMovement.CurrentStroke.club.minimumPowerPercentage,1);
             //Vector3 hitDir = Vector3.ProjectOnPlane(_camera.transform.forward.normalized, Vector3.up).normalized;
            // if (_camera != null) _golfMovement.CurrentStroke.aimDir = hitDir;
             //this doesn't need constant updating, ideally, but lets us drag the ball around in the scene for testing.

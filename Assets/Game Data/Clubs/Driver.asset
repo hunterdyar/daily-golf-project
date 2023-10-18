@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Driver
   power: 30
+  minimumPowerPercentage: 0.217
   angle: 25

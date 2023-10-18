@@ -5,6 +5,7 @@ namespace Golf
 	[System.Serializable]
 	public class Stroke
 	{
+		//todo: Capitalize
 		public Club club;
 		public StrokeStatus Status;
 		public Vector3 startPosition;
