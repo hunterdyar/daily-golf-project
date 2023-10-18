@@ -52,8 +52,7 @@ namespace Golf
         }
 
         public void HitBall()
-        {
-            timeNotMoving = 0;
+        { 
             //applies the forces to the ball
             CurrentStroke.Status = StrokeStatus.InMotion;
             _rigidbody.AddForce(CurrentStroke.GetForce(),ForceMode.Impulse);
