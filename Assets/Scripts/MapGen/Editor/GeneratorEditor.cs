@@ -1,6 +1,5 @@
 ﻿using UnityEditor;
 using UnityEditor.UIElements;
-using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
 namespace MapGen
@@ -12,7 +11,6 @@ namespace MapGen
 		{
 			Generator generator = (Generator)target;
 			var container = new VisualElement();
-			
 			
 			container.Add(new Label("Settings"));
 			//null checks are because I keep getting editor errors in the console. IMHO i consider this a unity bug.

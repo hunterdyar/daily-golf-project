@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using MapGen;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using Utilities;
 using Utilities.LayerAttribute;
 
@@ -33,6 +33,8 @@ namespace Golf
 		private GameObject _simulatedBall;
 		private Rigidbody _simulatedRB;
 		private Vector3 lastRefactoredPosition;
+		private List<Collider> _simulatedEnvironmentObjects = new List<Collider>();
+
 		
 		//cache
 		private Vector3 _previousSimulatedForce;
@@ -47,11 +49,16 @@ namespace Golf
 		private void OnEnable()
 		{
 			_golfMovement.OnNewStroke += ForceUpdateTrajectoryLine;
+			MapGenerator.OnGenerationComplete += OnGenerationComplete;
 		}
+
+	
 
 		private void OnDisable()
 		{
 			_golfMovement.OnNewStroke -= ForceUpdateTrajectoryLine;
+			MapGenerator.OnGenerationComplete -= OnGenerationComplete;
+
 		}
 
 		private void CreatePredictionScene()
@@ -74,6 +81,24 @@ namespace Golf
 				gameObject.SetActive(false);
 			}
 			
+		}
+
+		//create the environment
+		private void OnGenerationComplete(MapGenerator mapGen)
+		{
+			//todo: avoid race condition with check if the predictionScene is null, create it.
+
+			foreach (var collider in _simulatedEnvironmentObjects)
+			{
+				Destroy(collider.gameObject);
+			}
+			foreach (var collider in mapGen.EnvironmentColliders)
+			{
+				var col = Instantiate(collider);
+				col.gameObject.name = collider.gameObject.name + " Simulation";
+				col.gameObject.layer = simulationLayer;
+				SceneManager.MoveGameObjectToScene(col.gameObject, _predictionScene);
+			}
 		}
 
 		private void CreateSimulationObjects()

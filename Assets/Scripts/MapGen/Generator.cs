@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using UnityEditor;
 using UnityEngine;
 using Utilities.Kernels;
@@ -60,7 +59,6 @@ namespace MapGen
 			CalculateTeePositions();
 			
 			SaveTexture2D();
-			
 			
 			OnGenerate?.Invoke(_texture2D);
 		}
