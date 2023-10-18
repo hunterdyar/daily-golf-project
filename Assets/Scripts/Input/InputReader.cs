@@ -51,6 +51,7 @@ namespace Golf
 			//(quaternion * vector) will return a vector that has been rotated by that quaternion. neat!
 			// first we make a quaternion of just the little change in aim (delta)
 			// then we use that above trick to rotate the vector. it's a ref property so we are modifying the original.
+			aim = Vector3.ProjectOnPlane(aim, Vector3.up).normalized;
 			aim = Quaternion.AngleAxis(Aim * Time.deltaTime * _aimSpeed, up) * aim;
 		}
 
