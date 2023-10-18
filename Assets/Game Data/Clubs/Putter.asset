@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Putter
   m_EditorClassIdentifier: 
   displayName: Putter
-  power: 1
+  power: 10
   angle: 1

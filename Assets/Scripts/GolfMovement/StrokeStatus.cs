@@ -5,6 +5,8 @@
 		NotTaken,
 		Aiming,
 		InMotion,
-		Taken
+		Taken,//did it.
+		SankIt,//ended in the hole after this one.
+		Failure// out of bounds; in trap; needs reset.
 	}
 }

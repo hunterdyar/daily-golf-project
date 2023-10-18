@@ -1,7 +1,4 @@
-﻿using System.Threading;
-using UnityEditor.ShaderKeywordFilter;
-using UnityEngine;
-using UnityEngine.Serialization;
+﻿using UnityEngine;
 
 namespace Golf
 {
@@ -11,6 +8,7 @@ namespace Golf
 		public Club club;
 		public StrokeStatus Status;
 		public Vector3 startPosition;
+		public Vector3 endPosition;
 		public Vector3 aimDir;
 		public float inputPower;
 		public float hitTimer;
@@ -49,6 +47,19 @@ namespace Golf
 			// v = (f / m) * dt;
 			// v / dt = f / m;
 			// (v/dt)*m
+		}
+
+		public void Complete()
+		{
+			endPosition = _ball.position;
+			Status = StrokeStatus.Taken;
+		}
+
+		public void Failure()
+		{
+			endPosition = startPosition;//i guess.
+			//record trap type.
+			Status = StrokeStatus.Failure;
 		}
 	}
 }

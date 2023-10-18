@@ -78,17 +78,36 @@ namespace Golf
             if (_currentStroke.Status == StrokeStatus.InMotion || _currentStroke.Status == StrokeStatus.NotTaken)
             {
                 _currentStroke.Tick(Time.fixedDeltaTime);
+
+                if (IsOutOfBounds())
+                {
+                    _currentStroke.Failure();
+                    transform.position = _currentStroke.startPosition;
+                    _rigidbody.velocity = Vector3.zero;
+                    _rigidbody.angularVelocity = Vector3.zero;
+                    StartNewStrokeAndAim();
+                }
                 if (_currentStroke.hitTimer > 0.75f && _rigidbody.velocity.sqrMagnitude < 0.01f)
                 {
                     //if status was inMotion, add to list.
                     //if status was NotTaken, then we are in debug or first shot testing.
-                    _currentStroke.Status = StrokeStatus.Taken;
-                    _currentStroke = new Stroke(_rigidbody, _caddy.SelectedClub);
-                    _currentStroke.Status = StrokeStatus.Aiming;
+                    _currentStroke.Complete();
+                    StartNewStrokeAndAim();
                     //Update
                     OnNewStroke?.Invoke();
                 }
             }
+        }
+
+        private void StartNewStrokeAndAim()
+        {
+            _currentStroke = new Stroke(_rigidbody, _caddy.SelectedClub);
+            _currentStroke.Status = StrokeStatus.Aiming;
+        }
+
+        private bool IsOutOfBounds()
+        {
+            return transform.position.y < -5f;//todo: settings. other boundaries.
         }
     }
 }
