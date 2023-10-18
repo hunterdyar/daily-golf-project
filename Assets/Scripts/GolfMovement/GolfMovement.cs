@@ -56,9 +56,7 @@ namespace Golf
         private void Start()
         {
             //I save awake for configuring scriptableobjects, (like loading from save files) so I try not to read data until start.
-            _currentStroke = new Stroke(_rigidbody, _caddy.SelectedClub);
-            timeNotMoving = 0;
-            OnNewStroke?.Invoke();
+            StartNewStrokeAndAim();
         }
 
         public void HitBall()

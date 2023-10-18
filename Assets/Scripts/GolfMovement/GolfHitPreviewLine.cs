@@ -32,6 +32,7 @@ namespace Golf
 		//sim objects reference
 		private GameObject _simulatedBall;
 		private Rigidbody _simulatedRB;
+		private Vector3 lastRefactoredPosition;
 		
 		//cache
 		private Vector3 _previousSimulatedForce;
@@ -41,6 +42,16 @@ namespace Golf
 			_golfMovement = GetComponentInParent<GolfMovement>();
 
 			CreatePredictionScene();
+		}
+
+		private void OnEnable()
+		{
+			_golfMovement.OnNewStroke += ForceUpdateTrajectoryLine;
+		}
+
+		private void OnDisable()
+		{
+			_golfMovement.OnNewStroke -= ForceUpdateTrajectoryLine;
 		}
 
 		private void CreatePredictionScene()
@@ -90,23 +101,33 @@ namespace Golf
 		}
 		private void Update()
 		{
-			//to test if the sim is any good, comment the following line out. 
-			_lineRenderer.enabled = _golfMovement.IsAiming;
+			//disable display and when to update display are two separate problems.
+			//we should disable (draw) and never update when not aiming.
+			//we should update when the ball or the force changes.
 
-			if (ShouldUpdateDisplay())
+			if (ShouldDrawDisplay())
 			{
+				_lineRenderer.enabled = true;
 				UpdateTrajectory();
+			}
+			else
+			{
+				_lineRenderer.enabled = false;
 			}
 		}
 
-		private bool ShouldUpdateDisplay()
+		private bool ShouldDrawDisplay()
 		{
-			//we update all the time for testing, but won't during actual gameplay.
-			return (_golfMovement.CurrentStroke.Status != StrokeStatus.InMotion);
-			
-			//should just be isAiming.
+			//we can check the camera system to make sure it's not wrong either.
+
+			return (_golfMovement.CurrentStroke.Status != StrokeStatus.InMotion);//also check aiming so we don't draw during ball drop.
 		}
 
+		[ContextMenu("Force update Trajectory Line")]
+		public void ForceUpdateTrajectoryLine()
+		{
+			UpdateTrajectory();
+		}
 		private void UpdateTrajectory()
 		{
 			_simulatedBall.transform.position = _golfMovement.transform.position;
@@ -118,7 +139,7 @@ namespace Golf
 
 			Vector3 simulationForce = _golfMovement.CurrentStroke.GetForce();
 			//don't sim unless something changes with the force, or if something in the environment moves... what are other edge cases to consider triggers to keep this accurate?
-			bool simulationNeeded = simulationForce != _previousSimulatedForce;
+			bool simulationNeeded = simulationForce != _previousSimulatedForce || lastRefactoredPosition != _golfMovement.transform.position;
 			if (simulationNeeded)
 			{
 				_simulatedRB.AddForce(simulationForce, ForceMode.Impulse);
@@ -132,6 +153,8 @@ namespace Golf
 				_lineRenderer.SetPositions(_previewPoints);
 				_previousSimulatedForce = simulationForce;
 			}
+
+			lastRefactoredPosition = _golfMovement.transform.position;
 		}
 
 		private void OnDestroy()
