@@ -7,7 +7,7 @@ namespace Golf
 {
 	public class GolfGameManager : MonoBehaviour
 	{
-		[SerializeField] Scorecard _scorecard;
+		[SerializeField] ActiveGolfConfiguration _caddy;
 		private void OnEnable()
 		{
 			MapGenerator.OnGenerationComplete += StartNewGolfGame;
@@ -20,7 +20,7 @@ namespace Golf
 
 		private void StartNewGolfGame(MapGenerator obj)
 		{
-			_scorecard.ResetScorecard();
+			_caddy.StartNewGame();
 		}
 		
 	}

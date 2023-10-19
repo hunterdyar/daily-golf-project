@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using CameraSystem;
 using UnityEngine;
 using Utilities.ReadOnlyAttribute;
 
@@ -9,7 +8,7 @@ namespace Golf
 	[CreateAssetMenu(fileName = "Caddy", menuName = "Golf/Caddy", order = 0)]
 	public class ActiveGolfConfiguration : ScriptableObject
 	{
-		[SerializeField] private Scorecard _scorecard;
+		[SerializeField] private Golf.Scorecard _scorecard;
 
 		public GolfMovement CurrentPlayer => _currentPlayer;
 		private GolfMovement _currentPlayer;
@@ -31,6 +30,16 @@ namespace Golf
 		public void SetCurrentPlayer(GolfMovement player)
 		{
 			_currentPlayer = player;
+		}
+
+		//called by GolfGameManager (which maybe isn't needed...) when generation is complete.
+		
+		public void StartNewGame()
+		{
+			_scorecard.ResetScorecard();
+			selectedClubIndex = 0;
+			_currentStroke = new Stroke(_currentPlayer.Rigidbody, SelectedClub);
+			_currentStroke.Status = StrokeStatus.Aiming;
 		}
 
 		public void StartNewStrokeAndAim(Rigidbody ball)
