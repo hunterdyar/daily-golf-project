@@ -9,6 +9,8 @@ namespace Golf
 	[CreateAssetMenu(fileName = "Caddy", menuName = "Golf/Caddy", order = 0)]
 	public class ActiveGolfConfiguration : ScriptableObject
 	{
+		[SerializeField] private Scorecard _scorecard;
+
 		public GolfMovement CurrentPlayer => _currentPlayer;
 		private GolfMovement _currentPlayer;
 
@@ -33,7 +35,12 @@ namespace Golf
 
 		public void StartNewStrokeAndAim(Rigidbody ball)
 		{
-			//if current is not null, add previous to scorecard.
+			
+			//take previous stroke and add it to the score card.
+			if (_currentStroke != null)
+			{
+				_scorecard.ScoreStroke(_currentStroke);
+			}
 			
 			_currentStroke = new Stroke(ball, SelectedClub);
 			_currentStroke.Status = StrokeStatus.Aiming;

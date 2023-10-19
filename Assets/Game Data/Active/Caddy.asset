@@ -12,7 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15893e9620344ac58a0d66e4473f6309, type: 3}
   m_Name: Caddy
   m_EditorClassIdentifier: 
+  _scorecard: {fileID: 11400000, guid: 0ca03aa82b0068d40ae1c1276586623b, type: 2}
+  _currentStroke:
+    club: {fileID: 0}
+    Status: 0
+    startPosition: {x: 0, y: 0, z: 0}
+    endPosition: {x: 0, y: 0, z: 0}
+    aimDir: {x: 0, y: 0, z: 0}
+    inputPower: 0
+    hitTimer: 0
   clubs:
   - {fileID: 11400000, guid: cf459e7ab967e774faec3e96c69f9fa1, type: 2}
   - {fileID: 11400000, guid: ea5883def424bf54e90b15b5e5d1adf0, type: 2}
   - {fileID: 11400000, guid: 2eeb9fed0e386c04fbb459109d03b3e3, type: 2}
+  selectedClubIndex: 0

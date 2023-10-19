@@ -44,7 +44,7 @@ namespace CameraSystem
 		{
 			if (followPlayer)
 			{
-				transform.position = Player.transform.position;
+				//transform.position = Player.transform.position;
 			}
 		}
 	}

@@ -15,7 +15,7 @@ namespace CameraSystem
 			base.LateUpdate();
 			
 			transform.Rotate(Vector3.up,_InputReader.Look.x);
-			LookCam.Translate(Vector3.up * _InputReader.Look.y*Time.deltaTime);
+			//LookCam.Translate(Vector3.up * _InputReader.Look.y*Time.deltaTime);
 		}
 	}
 }

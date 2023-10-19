@@ -82,5 +82,10 @@ namespace Golf
 			_ball.velocity = Vector3.zero;
 			_ball.angularVelocity = Vector3.zero;
 		}
+
+		public float TravelDistance()
+		{
+			return Vector3.Distance(startPosition, endPosition);
+		}
 	}
 }
