@@ -1,4 +1,5 @@
-﻿using Cinemachine;
+﻿using System;
+using Cinemachine;
 using Golf;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
@@ -14,12 +15,18 @@ namespace CameraSystem
 		protected readonly int activeCameraAmount = 40;
 		public int CameraPriority = 0;//we could vcam priorities, but I want a truth value we can reset to after they get modified at runtime.
 		protected CameraSystem _cameraSystem;
+		public bool lookAtPlayer;
+		public bool followPlayer;
 		
 		public virtual void Init(CameraSystem system)
 		{
 			_cameraSystem = system;
-
 			_virtualCamera = GetComponentInChildren<CinemachineVirtualCameraBase>();
+			if (lookAtPlayer)
+			{
+				_virtualCamera.LookAt = Player.transform;
+			}
+
 		}
 		public void SetActiveCam(bool active)
 		{
@@ -30,6 +37,14 @@ namespace CameraSystem
 			else
 			{
 				_virtualCamera.Priority = CameraPriority;
+			}
+		}
+
+		protected virtual void LateUpdate()
+		{
+			if (followPlayer)
+			{
+				transform.position = Player.transform.position;
 			}
 		}
 	}

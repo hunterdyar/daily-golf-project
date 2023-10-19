@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace CameraSystem
 {
-	public class AimCamera : PlayerCamera
+	public class AimCamera : GolfCamera
 	{
 		public InputReader _InputReader;
 		public Transform LookCam => _virtualCamera.transform;
