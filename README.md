@@ -54,8 +54,9 @@ Basically entirelly in a single script/child of the player, GolfHitPreviewLine.c
 Uses [multi-scene physics](https://docs.unity3d.com/Manual/physics-multi-scene.html) to simulate the balls path and draw a line for each tick of that simulation. See the [TNTC](https://www.youtube.com/watch?v=4VUmhuhkELk) video for a breakdown of the technique.
 
 ### Camera Control
-Currently I use Cinemachine. The FreeLook camera is doing most of the work for me. 
-A todo will be better (more precise) aiming with a 'dead zone' before the camera starts panning. But I don't really know how I want the camera input to work yet.
+CameraSystem is a state machine. GolfCamera is the base class for a state. Actual camera switching is done via Cinemachine, changing the priority of the cameras, to use their blends.
+
+I'm not very happy with the system right now, need to take advantage of cinemachine more - blending to a tee camera when the ball is close to a tee, blending to an overview when the ball is high; but using our own script for when aiming. The plan is some appropriate mix of high level custom state machine with lower level cinemachine.
 
 ### Custom Attributes
 [ReadOnly] and [Layer] are not attributes that are built into Unity (although they should be).
