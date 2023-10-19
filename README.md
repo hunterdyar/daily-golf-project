@@ -12,9 +12,14 @@ The goal of this game is to use data-oriented design patterns and modular coding
 
 ## System Notes
 ### Golf Ball Movement
-'Stroke' is a [POCO](https://en.wikipedia.org/wiki/Plain_old_CLR_object) that describes a single hit on the golf ball. It's used to store previous hits and edited at runtime. GolfMovement.CurrentStroke is what the trajectory prediction system is using to figure out what force might get added, for example.
+'Stroke' is a [POCO](https://en.wikipedia.org/wiki/Plain_old_CLR_object) that describes a single hit on the golf ball. It's used to store previous hits and edited at runtime. (Caddy scriptable object).CurrentStroke is what the trajectory prediction system is using to figure out what force might get added, for example.
 
-The 'Caddy' is a scriptableObject (ActiveGolfConfiguration) that stores the current golfing setup: the clubs, etc.
+## Scriptale Object Organization
+"Active" scriptable objects (ActiveGolfConfiguration, InputReader) are objects used for storing references and accessing objects in the scene, instead of singletons, managers, or other such patterns to solve this problem. There is probably just one of these.
+
+"Game Data" scriptable objects (Clubs), on the other hand, is just data. Settings, etc.
+
+The Generator is a little of both. It's basically settings for generation, but it also stores a generation as an image texture sub asset.
 
 ### Input
 Uses new input system. InputActins have a c# class generated, and interfacing with the input actions is done entirely by an InputReader scriptable object. The rest of the project only interfaces with this, which provides convenient actions, process functions, and read-only properties. It keeps the rest of the code agnostic of which input system we are using. It lets us send 'fake' inputs in a non-jank way easily, either with inspector scripts or with public functions. 
