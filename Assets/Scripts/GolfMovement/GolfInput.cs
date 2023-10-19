@@ -44,7 +44,7 @@ namespace Golf
                 return;
             }
             
-            _inputReader.AdjustAimVectorTick(ref _golfMovement.CurrentStroke.aimDir);
+            _inputReader.AdjustAimVectorTick(ref _golfMovement.CurrentStroke.AimDir);
             
             _golfMovement.CurrentStroke.inputPower = Mathf.Clamp(_golfMovement.CurrentStroke.inputPower + _inputReader.PowerDelta * Time.deltaTime,_golfMovement.CurrentStroke.club.minimumPowerPercentage,1);
             //Vector3 hitDir = Vector3.ProjectOnPlane(_camera.transform.forward.normalized, Vector3.up).normalized;

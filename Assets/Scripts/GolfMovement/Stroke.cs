@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Golf
 {
@@ -10,7 +11,7 @@ namespace Golf
 		public StrokeStatus Status;
 		public Vector3 startPosition;
 		public Vector3 endPosition;
-		public Vector3 aimDir;
+		public Vector3 AimDir;
 		public float inputPower;
 		public float hitTimer;
 		private float timeNotMoving;
@@ -24,7 +25,7 @@ namespace Golf
 			this.club = club;
 			Status = StrokeStatus.NotTaken;
 			this.startPosition = ball.position;
-			aimDir = ball.transform.forward;
+			AimDir = ball.transform.forward;
 			inputPower = 0;
 		}
 
@@ -42,7 +43,7 @@ namespace Golf
 		}
 		private Vector3 GetRealAimDir()
 		{
-			return Vector3.RotateTowards(aimDir, Vector3.up, club.angle * Mathf.Deg2Rad, Mathf.Infinity).normalized;
+			return Vector3.RotateTowards(AimDir, Vector3.up, club.angle * Mathf.Deg2Rad, Mathf.Infinity).normalized;
 		}
 
 		public Vector3 GetForce()

@@ -34,32 +34,25 @@ namespace CameraSystem
 			// }
 			// transform.Rotate(Vector3.up,_inputReader.Look.x); 
 
-			var aim = _caddy.CurrentStroke.aimDir;
+			var aim = _caddy.CurrentStroke.AimDir;
 			_pov.m_HorizontalAxis.Value = Quaternion.LookRotation(aim).eulerAngles.y;
 
 			var height = _cameraOffset.m_Offset.z;
-			//height?
-			// _caddy.CurrentStroke.inputPower;
+			//_caddy.CurrentStroke.inputPower;
+			height = 3;//club.minHeight, club.maxHeight, inputPower.
+
+			//idk we'll figure out this later.
+			float pullback = Mathf.Clamp(_caddy.CurrentStroke.inputPower * _caddy.SelectedClub.power / 4, 1, 10);
 			
-			_cameraOffset.m_Offset = new Vector3(_cameraOffset.m_Offset.x, _cameraOffset.m_Offset.y, _cameraOffset.m_Offset.z);
+			_cameraOffset.m_Offset = new Vector3(_cameraOffset.m_Offset.x, height, -pullback);
 		}
 
+		
+		
+		//stops cinemachine from complaining about not having an input provider.
 		//Axis index ranges from 0...2 for X, Y, and Z.
-
 		public float GetAxisValue(int axis)
 		{
-			if (enabled)
-			{
-				// if (axis < 2)
-				// {
-				// 	return Vector3.Angle(Vector3.forward, _caddy.CurrentStroke.aimDir);
-				// }
-				// else
-				// {
-				// 	return 0;
-				// }
-			}
-
 			return 0;
 		}
 	}

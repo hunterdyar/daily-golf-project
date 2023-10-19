@@ -1,4 +1,5 @@
 ﻿using System;
+using Cinemachine;
 using Golf;
 using UnityEngine;
 using Utilities.ReadOnlyAttribute;
@@ -14,72 +15,40 @@ namespace CameraSystem
 		[Header("Camera Config")]
 		//[ReadOnly, SerializeField] private GolfCamera[] _cameras;
 
-		[SerializeField] private GolfCamera _aimCamera;
-		[SerializeField] private GolfCamera _inFlightCamera;
+		[SerializeField] private CinemachineVirtualCameraBase _aimCamera;
 
-		private GolfCamera ActiveCamera;
+		[SerializeField] private CinemachineVirtualCameraBase _inFlight;
+
+		private CinemachineMixingCamera _mixingCam;
+
 		public virtual void Start()
 		{
-			//FindAndInitializeCameras();
-		}
-
-		// public void FindAndInitializeCameras()
-		// {
-		// 	_cameras = transform.GetComponentsInChildren<GolfCamera>();
-		// 	//disable all cameras. Enable the one with the highest default priority.
-		// 	GolfCamera highestPriorityCam = null;
-		// 	int priority = Int32.MinValue;
-		// 	foreach (var camera in _cameras)
-		// 	{
-		// 		camera.Init(this);
-		// 		camera.SetActiveCam(false);
-		//
-		// 		if (camera is AimCameraControl aimCamera)
-		// 		{
-		// 			_aimCamera = aimCamera;
-		// 		}
-		// 		
-		// 		if (camera.CameraPriority > priority)
-		// 		{
-		// 			priority = camera.CameraPriority;
-		// 			highestPriorityCam = camera;
-		// 		}
-		// 	}
-		// 	highestPriorityCam.SetActiveCam(true);
-		// 	ActiveCamera = highestPriorityCam;
-		// }
-
-		private void SetActiveCamera(GolfCamera camera)
-		{
-			if (ActiveCamera == camera)
-			{
-				return;
-			}
-
-			if (ActiveCamera != null)
-			{
-				ActiveCamera.SetActiveCam(false);
-			}
-
-			ActiveCamera = camera;
-			camera.SetActiveCam(true);
+			_mixingCam = GetComponent<CinemachineMixingCamera>();
 		}
 
 		void Update()
 		{
 			//hacky listener pattern until we start subscribing to invents.
+			
+			//set aim 
 			if (_caddy.CurrentStroke.Status == StrokeStatus.Aiming)
 			{
-				if (ActiveCamera != _aimCamera)
-				{
-					SetActiveCamera(_aimCamera);
-				}
-			}else if (_caddy.CurrentStroke.Status == StrokeStatus.InMotion)
+				_mixingCam.SetWeight(_aimCamera,100);
+				
+			}
+			else
 			{
-				if (ActiveCamera != _inFlightCamera)
-				{
-					SetActiveCamera(_inFlightCamera);
-				}
+				_mixingCam.SetWeight(_aimCamera, 0);
+			}
+			
+			//set flight
+			if (_caddy.CurrentStroke.Status == StrokeStatus.InMotion)
+			{
+				_mixingCam.SetWeight(_inFlight, 1);
+			}
+			else
+			{
+				_mixingCam.SetWeight(_inFlight, 0);
 			}
 		}
 	}
