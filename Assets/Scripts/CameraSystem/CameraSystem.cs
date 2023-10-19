@@ -12,7 +12,7 @@ namespace CameraSystem
 		[Header("Active Config")] [SerializeField]
 		private ActiveGolfConfiguration _caddy;
 		[Header("Camera Config")]
-		[ReadOnly, SerializeField] private GolfCamera[] _cameras;
+		//[ReadOnly, SerializeField] private GolfCamera[] _cameras;
 
 		[SerializeField] private GolfCamera _aimCamera;
 		[SerializeField] private GolfCamera _inFlightCamera;
@@ -20,34 +20,34 @@ namespace CameraSystem
 		private GolfCamera ActiveCamera;
 		public virtual void Start()
 		{
-			FindAndInitializeCameras();
+			//FindAndInitializeCameras();
 		}
 
-		public void FindAndInitializeCameras()
-		{
-			_cameras = transform.GetComponentsInChildren<GolfCamera>();
-			//disable all cameras. Enable the one with the highest default priority.
-			GolfCamera highestPriorityCam = null;
-			int priority = Int32.MinValue;
-			foreach (var camera in _cameras)
-			{
-				camera.Init(this);
-				camera.SetActiveCam(false);
-
-				if (camera is AimCamera aimCamera)
-				{
-					_aimCamera = aimCamera;
-				}
-				
-				if (camera.CameraPriority > priority)
-				{
-					priority = camera.CameraPriority;
-					highestPriorityCam = camera;
-				}
-			}
-			highestPriorityCam.SetActiveCam(true);
-			ActiveCamera = highestPriorityCam;
-		}
+		// public void FindAndInitializeCameras()
+		// {
+		// 	_cameras = transform.GetComponentsInChildren<GolfCamera>();
+		// 	//disable all cameras. Enable the one with the highest default priority.
+		// 	GolfCamera highestPriorityCam = null;
+		// 	int priority = Int32.MinValue;
+		// 	foreach (var camera in _cameras)
+		// 	{
+		// 		camera.Init(this);
+		// 		camera.SetActiveCam(false);
+		//
+		// 		if (camera is AimCameraControl aimCamera)
+		// 		{
+		// 			_aimCamera = aimCamera;
+		// 		}
+		// 		
+		// 		if (camera.CameraPriority > priority)
+		// 		{
+		// 			priority = camera.CameraPriority;
+		// 			highestPriorityCam = camera;
+		// 		}
+		// 	}
+		// 	highestPriorityCam.SetActiveCam(true);
+		// 	ActiveCamera = highestPriorityCam;
+		// }
 
 		private void SetActiveCamera(GolfCamera camera)
 		{

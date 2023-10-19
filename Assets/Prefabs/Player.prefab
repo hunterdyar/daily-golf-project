@@ -201,7 +201,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5073456759333780350}
-  m_Mesh: {fileID: 289301614986012343, guid: 5fe879662422de848acf835adc5c2c48, type: 3}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &7167479987305954144
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -299,7 +299,7 @@ Transform:
   - {fileID: 5876869375921206117}
   - {fileID: 546169405372649050}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &6832413324499654683
 Rigidbody:
@@ -353,13 +353,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20df8f70fdb0b554fa43d3de84e858d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _currentStroke:
-    club: {fileID: 0}
-    Status: 0
-    startPosition: {x: 0, y: 0, z: 0}
-    endPosition: {x: 0, y: 0, z: 0}
-    aimDir: {x: 0, y: 0, z: 0}
-    inputPower: 0
-    hitTimer: 0
-  timeNotMovingThreshold: 0.5
   _caddy: {fileID: 11400000, guid: a3f947459aa485049a93525a5293db30, type: 2}
