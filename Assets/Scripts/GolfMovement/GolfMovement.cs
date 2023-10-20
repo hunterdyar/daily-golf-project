@@ -47,8 +47,6 @@ namespace Golf
 
         private void Start()
         {
-            //I save awake for configuring scriptableobjects, (like loading from save files) so I try not to read data until start.
-            Caddy.StartNewStrokeAndAim(_rigidbody);
         }
 
         public void HitBall()
