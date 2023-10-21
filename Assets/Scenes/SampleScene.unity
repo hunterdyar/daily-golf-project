@@ -188,7 +188,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 243236363}
-  m_LocalRotation: {x: 0.5569271, y: -0, z: -0, w: 0.8305614}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -7.95, y: 1.154, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -222,9 +222,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44d70cc20219cd84593f67d248eafe36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Offset: {x: 0, y: 3, z: -1.231179}
-  m_ApplyAfter: 1
-  m_PreserveComposition: 1
+  m_Offset: {x: 0, y: 3, z: -1}
+  m_ApplyAfter: 0
+  m_PreserveComposition: 0
 --- !u!1 &288810216
 GameObject:
   m_ObjectHideFlags: 0
@@ -461,7 +461,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 5000
-  field of view: 77.631874
+  field of view: 88.58538
   orthographic: 0
   orthographic size: 10
   m_Depth: -1
@@ -486,8 +486,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.3362397, y: -0.61910516, z: 0.120549046, w: 0.69937086}
-  m_LocalPosition: {x: 285.21445, y: 157.6172, z: 254.67776}
+  m_LocalRotation: {x: 0.00049332005, y: -0.005623374, z: 0.0010949551, w: 0.99998355}
+  m_LocalPosition: {x: -5.467941, y: 5.453287, z: 1.1654875}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1182,8 +1182,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _caddy: {fileID: 11400000, guid: a3f947459aa485049a93525a5293db30, type: 2}
-  _aimCamera: {fileID: 0}
-  _inFlight: {fileID: 0}
+  _aimCamera: {fileID: 243236364}
+  _inFlight: {fileID: 288810218}
 --- !u!114 &1265174329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1202,8 +1202,8 @@ MonoBehaviour:
   m_StreamingVersion: 20170927
   m_Priority: 20
   m_StandbyUpdate: 2
-  m_Weight0: 1.2
-  m_Weight1: 1.21
+  m_Weight0: 100
+  m_Weight1: 0
   m_Weight2: 0.5
   m_Weight3: 0.5
   m_Weight4: 0.5
