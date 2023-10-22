@@ -1,0 +1,3 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/SlicedTerrain/Resources/slicedTerrain/slicedTerrain.uss?fileID=7433441132597879392&amp;guid=be8304eeb31065442b29c6d1b1cdb819&amp;type=3#slicedTerrain" />
+</ui:UXML>
