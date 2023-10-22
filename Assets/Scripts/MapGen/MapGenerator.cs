@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Golf;
+using UnityEditor;
 using UnityEngine;
 using Utilities.ReadOnlyAttribute;
 using Random = UnityEngine.Random;
@@ -23,6 +24,8 @@ namespace MapGen
 		[SerializeField] private MeshColliderCookingOptions cookingOptions;
 		[ReadOnly]
 		public List<Collider> EnvironmentColliders = new List<Collider>();
+
+		private Texture2D _genTex;
 		private void Start()
 		{
 			if (GenerateOnStart)
@@ -41,6 +44,7 @@ namespace MapGen
 
 		private void OnGenerate(Texture2D tex)
 		{
+			_genTex = tex;
 			//Delete and reset from last generation, so we can spam and test without exiting play mode.
 			EnvironmentColliders.Clear();
 			foreach (Transform child in transform)
@@ -158,6 +162,25 @@ namespace MapGen
 			}
 
 			return null;
+		}
+
+
+		private GameObject GetPrefabFromSlicedTerrain(int x, int y, SlicedTerrain terrain)
+		{
+			return terrain.PrefabFromXZNeighbors(NeighborTest, x, y, TerrainHeightLayer.IsTop);
+		}
+
+		private bool NeighborTest(int x, int y, int dx, int dy)
+		{
+			int nx = x + dx;
+			int ny = y + dy;
+			if (nx < 0 || nx >= _genTex.width || ny < 0 || ny >= _genTex.height)
+			{
+				return false;
+			}
+			
+			//Todo: this doesn't work, we have to get the z to see if there's a neighbor.
+			return _genTex.GetPixel(nx, ny).grayscale > 0.01f;
 		}
 	}
 }
