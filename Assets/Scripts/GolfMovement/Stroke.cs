@@ -1,14 +1,25 @@
-﻿using UnityEngine;
-using UnityEngine.Serialization;
+﻿using System;
+using UnityEngine;
+using UnityEngine.Events;
 
 namespace Golf
 {
 	[System.Serializable]
 	public class Stroke
 	{
+		//Events
+		//public static Action<Stroke> OnStrokeComplete;
+		
+		/// <summary>
+		/// Invoked when a stroke's status changes. Stroke is the relevant stroke and status is the new status.
+		
+		/// </summary>
+		public static Action<Stroke,StrokeStatus> OnStrokeStatusChange;
+		
+		//Properties
 		//todo: Capitalize
 		public Club club;
-		public StrokeStatus Status;
+		public StrokeStatus Status { get; private set; }
 		public Vector3 startPosition;
 		public Vector3 endPosition;
 		public Vector3 AimDir;
@@ -19,6 +30,7 @@ namespace Golf
 
 		public Rigidbody BallRB => _ball;
 		private Rigidbody _ball;
+
 		public Stroke(Rigidbody ball, Club club)
 		{
 			_ball = ball;
@@ -27,6 +39,12 @@ namespace Golf
 			this.startPosition = ball.position;
 			AimDir = ball.transform.forward;
 			inputPower = 0;
+		}
+
+		public void StartAiming()
+		{
+			Status = StrokeStatus.Aiming;
+			OnStrokeStatusChange?.Invoke(this,StrokeStatus.Aiming);
 		}
 
 		public void Tick(float delta)
@@ -56,6 +74,7 @@ namespace Golf
 		{
 			endPosition = _ball.position;
 			Status = StrokeStatus.Taken;
+			OnStrokeStatusChange?.Invoke(this,StrokeStatus.Taken);
 		}
 
 		public void Failure()
@@ -63,6 +82,8 @@ namespace Golf
 			endPosition = startPosition;//To tally the total distance, this stroke accomplished 0.
 			//record trap type?
 			Status = StrokeStatus.Failure;
+			OnStrokeStatusChange?.Invoke(this, StrokeStatus.Failure);
+
 		}
 
 		/// <summary>
@@ -87,6 +108,14 @@ namespace Golf
 		public float TravelDistance()
 		{
 			return Vector3.Distance(startPosition, endPosition);
+		}
+
+		public void Strike()
+		{
+			Status = StrokeStatus.InMotion;
+			_ball.AddForce(GetForce(), ForceMode.Impulse);
+			OnStrokeStatusChange?.Invoke(this, StrokeStatus.InMotion);
+
 		}
 	}
 }

@@ -8,8 +8,10 @@ namespace Golf
 	[CreateAssetMenu(fileName = "Caddy", menuName = "Golf/Caddy", order = 0)]
 	public class ActiveGolfConfiguration : ScriptableObject
 	{
-		[SerializeField] private Golf.Scorecard _scorecard;
-
+		//References
+		[SerializeField] private Scorecard _scorecard;
+		
+		//Properties
 		public GolfMovement CurrentPlayer => _currentPlayer;
 		private GolfMovement _currentPlayer;
 
@@ -39,7 +41,7 @@ namespace Golf
 			_scorecard.ResetScorecard();
 			selectedClubIndex = 0;
 			_currentStroke = new Stroke(_currentPlayer.Rigidbody, SelectedClub);
-			_currentStroke.Status = StrokeStatus.Aiming;
+			_currentStroke.StartAiming();
 		}
 
 		public void StartNewStrokeAndAim(Rigidbody ball)
@@ -52,7 +54,7 @@ namespace Golf
 			}
 			
 			_currentStroke = new Stroke(ball, SelectedClub);
-			_currentStroke.Status = StrokeStatus.Aiming;
+			_currentStroke.StartAiming();
 			//OnNewStroke?.Invoke();
 		}
 		public void CycleClub(int delta = 1)
