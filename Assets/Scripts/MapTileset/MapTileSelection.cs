@@ -28,15 +28,26 @@ namespace MapTileset
 		{
 			Vector3Int.up,
 			Vector3Int.down,
-			Vector3Int.back,
 			Vector3Int.forward,
-			Vector3Int.left,
 			Vector3Int.right,
-			ForwardRight,
-			ForwardLeft,
-			BackLeft,
-			BackRight
+		    Vector3Int.left,
+			Vector3Int.back,
+			 ForwardRight,
+			 ForwardLeft,
+			 BackLeft,
+			 BackRight
 		};
+
+		// Vector3Int.up,
+		// Vector3Int.down,
+		// Vector3Int.back,
+		// Vector3Int.forward,
+		// Vector3Int.left,
+		// Vector3Int.right,
+		// ForwardRight,
+		// ForwardLeft,
+		// BackLeft,
+		// BackRight
 		
 		public delegate bool NeighborTestDelegate(Vector3Int pos, Vector3Int dir);
 		
@@ -55,15 +66,20 @@ namespace MapTileset
 		public TileNeighbor ForwardLeftCorner;
 		public TileNeighbor BackRightCorner;
 		public TileNeighbor BackLeftCorner;
-		
+
+		Dictionary<Vector3Int, bool> resultCache = new Dictionary<Vector3Int, bool>();
+
 		public bool Matches(NeighborTestDelegate neighborTest, Vector3Int pos, out (GameObject, Quaternion) match)
 		{
-			Dictionary<Vector3Int, bool> resultCache = new Dictionary<Vector3Int, bool>();
-			var rotations = GetRotationsForFace(Face);
+			//clear the dictionary
+			resultCache.Clear();
+			
+			var rotations = GetRotationsForFaceSetting(Face);
 
 			match.Item1 = Prefab;
 			match.Item2 = Quaternion.identity;
 			
+			//in many cases there is only one rotation.
 			foreach (var o in rotations)
 			{
 				bool valid = true;
@@ -75,46 +91,42 @@ namespace MapTileset
 
 					if (face == TileNeighbor.Any)
 					{
+						//still valid no matter what...
 						continue;
 					}
 					
-					//if dir is in the cache, a gets set.
-					if (!resultCache.TryGetValue(dir, out bool a))
+					//if dir is in the cache, gets set.
+					if (!resultCache.TryGetValue(dir, out bool hasNeighbor))
 					{
-						a = neighborTest(pos, dir);
-						resultCache.Add(dir, a);
+						hasNeighbor = neighborTest(pos, dir);
+						resultCache.Add(dir, hasNeighbor);
 					}
+
+					hasNeighbor = neighborTest(pos, dir);
 
 					//get our results.
 					if (face == TileNeighbor.HasNeighbor)
 					{
-						if (!a)
+						if (!hasNeighbor)
 						{
 							//invalid test.
 							valid = false;
 							break;
 						}
-						else
-						{
-							continue;
-						}
 					}else if (face == TileNeighbor.NoNeighbor)
 					{
-						if (a)
+						if (hasNeighbor)
 						{
 							//invalid test
 							valid = false;
 							break;
 						}
-						else
-						{
-							continue;
-						}
 					}
-				}//end rotation loop
+				}//end directions loop
 
 				if (valid)
 				{
+					Debug.Log($"{Prefab.name} for {o}!");
 					//match.Item1 = Prefab;
 					match.Item2 = o;
 					return true;
@@ -127,8 +139,9 @@ namespace MapTileset
 		public TileNeighbor GetFaceForDir(Vector3Int dir)
 		{
 			//todo: cache a dictionary...
-			//we know that these properties don't change, but we shouldn't assume that. Our cache should reset for each lookup.
-			//so lets just do this for now, and turn it into a Vector3Cube later.
+			//we know that these properties don't change, but we shouldn't assume that. Our cache should reset for each lookup. 
+			//it would be safe to assume they don't change during a single lookup, or generation.
+			//lets just do this for now, and turn it into a Cubearray or dictionary later.
 			if (dir == Vector3Int.up)
 			{
 				return Above;
@@ -184,7 +197,7 @@ namespace MapTileset
 			var newDir = rot * dir;
 			return new Vector3Int(Mathf.RoundToInt(newDir.x), Mathf.RoundToInt(newDir.y), Mathf.RoundToInt(newDir.z));
 		}
-		public static Quaternion[] GetRotationsForFace(TileFaceType face)
+		public static Quaternion[] GetRotationsForFaceSetting(TileFaceType face)
 		{
 			switch (face)
 			{
