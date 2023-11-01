@@ -12,3 +12,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b87cffb1dfe34768bbb7f2ef37ac3473, type: 3}
   m_Name: Map Tileset
   m_EditorClassIdentifier: 
+  _tilePatterns:
+  - Face: 0
+    Prefab: {fileID: 1091978313851992760, guid: ae95815d4ad04d84cb88ae9f71d14889,
+      type: 3}
+    Above: 2
+    Below: 0
+    Right: 2
+    Left: 1
+    Forward: 2
+    Back: 1
+    ForwardRightCorner: 0
+    ForwardLeftCorner: 0
+    BackRightCorner: 0
+    BackLeftCorner: 0
+  - Face: 0
+    Prefab: {fileID: 1091978313851992760, guid: 887e4b687e66c3e42959e698e51e438c,
+      type: 3}
+    Above: 2
+    Below: 0
+    Right: 1
+    Left: 1
+    Forward: 2
+    Back: 1
+    ForwardRightCorner: 0
+    ForwardLeftCorner: 0
+    BackRightCorner: 0
+    BackLeftCorner: 0
+  - Face: 2
+    Prefab: {fileID: 1091978313851992760, guid: aa50e010766e1f24983750fb155f3e7c,
+      type: 3}
+    Above: 0
+    Below: 0
+    Right: 0
+    Left: 0
+    Forward: 0
+    Back: 0
+    ForwardRightCorner: 0
+    ForwardLeftCorner: 0
+    BackRightCorner: 0
+    BackLeftCorner: 0

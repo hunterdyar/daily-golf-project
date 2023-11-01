@@ -67,9 +67,10 @@ namespace MapTileset
 			foreach (var o in rotations)
 			{
 				bool valid = true;
-				//var dir = RotatedVector3Int(new Vector3Int(0, 1, 0),o);
-				foreach(Vector3Int dir in TestDirections)
+				
+				foreach(Vector3Int direction in TestDirections)
 				{
+					var dir = RotatedVector3Int(direction, o);
 					var face = GetFaceForDir(dir);
 
 					if (face == TileNeighbor.Any)
@@ -77,10 +78,8 @@ namespace MapTileset
 						continue;
 					}
 					
-					bool a = false;
-
 					//if dir is in the cache, a gets set.
-					if (!resultCache.TryGetValue(dir, out a))
+					if (!resultCache.TryGetValue(dir, out bool a))
 					{
 						a = neighborTest(pos, dir);
 						resultCache.Add(dir, a);
@@ -112,7 +111,7 @@ namespace MapTileset
 							continue;
 						}
 					}
-				}
+				}//end rotation loop
 
 				if (valid)
 				{
@@ -120,10 +119,9 @@ namespace MapTileset
 					match.Item2 = o;
 					return true;
 				}
-			}
+			}//loop next rotation
 
 			return false;
-			
 		}
 
 		public TileNeighbor GetFaceForDir(Vector3Int dir)
@@ -170,14 +168,21 @@ namespace MapTileset
 				return ForwardLeftCorner;
 			}
 
-			Debug.LogWarning("Bad Orientation");
+			Debug.LogWarning($"Bad Orientation: {dir}");
 			return TileNeighbor.Any;
 		}
 
 		private Vector3Int RotatedVector3Int(Vector3Int dir, Quaternion rot)
 		{
+			if (rot == Quaternion.identity)
+			{
+				return dir;
+			}
+			
+			//there is FOR SURE a faster way to do this, if we knew what the rotation was as a ... not quaternion/euler. Like an enum.
+			
 			var newDir = rot * dir;
-			return new Vector3Int((int)newDir.x, (int)newDir.y, (int)newDir.z);
+			return new Vector3Int(Mathf.RoundToInt(newDir.x), Mathf.RoundToInt(newDir.y), Mathf.RoundToInt(newDir.z));
 		}
 		public static Quaternion[] GetRotationsForFace(TileFaceType face)
 		{

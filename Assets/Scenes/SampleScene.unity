@@ -1100,35 +1100,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cedce2e4ce2b4a2ea845c30db9e9a2d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mapTileset: {fileID: 11400000, guid: 577011431441f944d890a38f1cf2229a, type: 2}
   _generator: {fileID: 11400000, guid: 03d84967f2c05cc43aabc80239bdf908, type: 2}
   GroundPrefab: {fileID: 1091978313851992760, guid: aa50e010766e1f24983750fb155f3e7c,
     type: 3}
   TeePrefab: {fileID: 14044861037011503, guid: d94b1a1763c9e5d45bfd81ac742a40c9, type: 3}
   scale: 1
-  perlinHeightCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   steps: 4
   GenerateOnStart: 1
   cookingOptions: 12
