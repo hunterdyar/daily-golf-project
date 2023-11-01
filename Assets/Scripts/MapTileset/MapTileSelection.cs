@@ -128,9 +128,9 @@ namespace MapTileset
 
 		public TileNeighbor GetFaceForDir(Vector3Int dir)
 		{
-			//todo: cache a static dictionary...
-			//we could lazy add to a static dictionary?
-			
+			//todo: cache a dictionary...
+			//we know that these properties don't change, but we shouldn't assume that. Our cache should reset for each lookup.
+			//so lets just do this for now, and turn it into a Vector3Cube later.
 			if (dir == Vector3Int.up)
 			{
 				return Above;
