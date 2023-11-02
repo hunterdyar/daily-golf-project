@@ -16,6 +16,19 @@ MonoBehaviour:
     type: 3}
   _tilePatterns:
   - Face: 0
+    Prefab: {fileID: 1091978313851992760, guid: 887e4b687e66c3e42959e698e51e438c,
+      type: 3}
+    Above: 2
+    Below: 0
+    Right: 1
+    Left: 1
+    Forward: 2
+    Back: 1
+    ForwardRightCorner: 0
+    ForwardLeftCorner: 0
+    BackRightCorner: 0
+    BackLeftCorner: 0
+  - Face: 0
     Prefab: {fileID: 1091978313851992760, guid: ae95815d4ad04d84cb88ae9f71d14889,
       type: 3}
     Above: 2
@@ -29,15 +42,28 @@ MonoBehaviour:
     BackRightCorner: 0
     BackLeftCorner: 0
   - Face: 0
-    Prefab: {fileID: 1091978313851992760, guid: 887e4b687e66c3e42959e698e51e438c,
+    Prefab: {fileID: 1091978313851992760, guid: 6141e151e4043a44ab7d5b89a2a15bd4,
       type: 3}
     Above: 2
     Below: 0
-    Right: 1
-    Left: 1
+    Right: 2
+    Left: 2
     Forward: 2
     Back: 1
     ForwardRightCorner: 0
     ForwardLeftCorner: 0
     BackRightCorner: 0
     BackLeftCorner: 0
+  - Face: 0
+    Prefab: {fileID: 1091978313851992760, guid: e07f0c1a9f7c71d4d9e6fa883e549eb2,
+      type: 3}
+    Above: 2
+    Below: 0
+    Right: 2
+    Left: 2
+    Forward: 2
+    Back: 2
+    ForwardRightCorner: 2
+    ForwardLeftCorner: 2
+    BackRightCorner: 2
+    BackLeftCorner: 2

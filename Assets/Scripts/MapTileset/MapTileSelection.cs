@@ -126,7 +126,6 @@ namespace MapTileset
 
 				if (valid)
 				{
-					Debug.Log($"{Prefab.name} for {o}!");
 					//match.Item1 = Prefab;
 					match.Item2 = o;
 					return true;
