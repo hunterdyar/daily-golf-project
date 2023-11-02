@@ -7,6 +7,8 @@ namespace MapTileset
 	[CreateAssetMenu(fileName = "Map Tileset", menuName = "Golf/Map 3D Tileset", order = 0)]
 	public class MapTileset : ScriptableObject
 	{
+		//todo: custom editor so this doesn't allow non-prefabs.
+		[SerializeField] private GameObject _defaultPrefab;
 		
 		[SerializeField]
 		private MapTileSelection[] _tilePatterns;
@@ -21,7 +23,7 @@ namespace MapTileset
 				}
 			}
 			
-			return (null,Quaternion.identity);
+			return (_defaultPrefab,Quaternion.identity);
 		}
 	}
 }
