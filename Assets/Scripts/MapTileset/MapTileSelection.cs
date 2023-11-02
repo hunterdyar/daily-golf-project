@@ -67,19 +67,19 @@ namespace MapTileset
 		public TileNeighbor BackRightCorner;
 		public TileNeighbor BackLeftCorner;
 
-		Dictionary<Vector3Int, bool> resultCache = new Dictionary<Vector3Int, bool>();
+		Dictionary<Vector3Int, bool> _resultCache = new Dictionary<Vector3Int, bool>();
 
 		public bool Matches(NeighborTestDelegate neighborTest, Vector3Int pos, out (GameObject, Quaternion) match)
 		{
 			//clear the dictionary
-			resultCache.Clear();
+			_resultCache.Clear();
 			
 			var rotations = GetRotationsForFaceSetting(Face);
 
 			match.Item1 = Prefab;
 			match.Item2 = Quaternion.identity;
 			
-			//in many cases there is only one rotation.
+			//in many cases there is only one rotation; identity.
 			foreach (var o in rotations)
 			{
 				bool valid = true;
@@ -87,7 +87,7 @@ namespace MapTileset
 				foreach(Vector3Int direction in TestDirections)
 				{
 					var dir = RotatedVector3Int(direction, o);
-					var face = GetFaceForDir(dir);
+					var face = GetFaceForDir(direction);
 
 					if (face == TileNeighbor.Any)
 					{
@@ -96,10 +96,10 @@ namespace MapTileset
 					}
 					
 					//if dir is in the cache, gets set.
-					if (!resultCache.TryGetValue(dir, out bool hasNeighbor))
+					if (!_resultCache.TryGetValue(dir, out bool hasNeighbor))
 					{
 						hasNeighbor = neighborTest(pos, dir);
-						resultCache.Add(dir, hasNeighbor);
+						_resultCache.Add(dir, hasNeighbor);
 					}
 
 					hasNeighbor = neighborTest(pos, dir);

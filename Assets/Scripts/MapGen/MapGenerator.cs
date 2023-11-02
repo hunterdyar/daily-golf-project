@@ -208,7 +208,7 @@ namespace MapGen
 			}
 
 			//we divide the world into steps. if we are above the h, it's air. No tunnels or overhangs. 
-			return h >= ((pos.y) / (float)steps);
+			return h > ((pos.y) / (float)steps);
 		}
 	}
 }
