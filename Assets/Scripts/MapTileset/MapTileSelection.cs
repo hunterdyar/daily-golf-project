@@ -37,17 +37,6 @@ namespace MapTileset
 			 BackLeft,
 			 BackRight
 		};
-
-		// Vector3Int.up,
-		// Vector3Int.down,
-		// Vector3Int.back,
-		// Vector3Int.forward,
-		// Vector3Int.left,
-		// Vector3Int.right,
-		// ForwardRight,
-		// ForwardLeft,
-		// BackLeft,
-		// BackRight
 		
 		public delegate bool NeighborTestDelegate(Vector3Int pos, Vector3Int dir);
 		

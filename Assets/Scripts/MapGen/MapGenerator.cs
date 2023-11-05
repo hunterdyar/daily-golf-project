@@ -11,8 +11,7 @@ namespace MapGen
 	public class MapGenerator : MonoBehaviour
 	{
 		public static Action<MapGenerator> OnGenerationComplete;
-
-
+		
 		public MapTileset.MapTileset _mapTileset;
 		public Generator _generator;
 		public GameObject GroundPrefab;
@@ -87,6 +86,10 @@ namespace MapGen
 							//if the object we are cloning has a MeshCollider, let's grab it's mesh.
 							if (c != null && c is MeshCollider instanceMeshCollider)
 							{
+								if(!instanceMeshCollider.sharedMesh.isReadable)
+								{
+									Debug.LogError("Mesh needs to be read enabled. Check Read/Write in import settings.",instanceMeshCollider.sharedMesh);
+								}
 								ci.mesh = instanceMeshCollider.sharedMesh; //we will be merging all of the meshes.
 								instanceMeshCollider.enabled = false;
 							}
@@ -101,7 +104,12 @@ namespace MapGen
 
 								//if the object we are cloning does NOT have a mesh collider, we can't use the BoxCollider or SphereCollider, since they don't use meshes under the hood, but optimized equations
 								//so we will use the regular mesh from the Mesh Renderer instead.
-								ci.mesh = o.GetComponent<MeshFilter>().sharedMesh;
+								var mfMesh = o.GetComponent<MeshFilter>().sharedMesh;
+								if (!mfMesh.isReadable)
+								{
+									Debug.LogError("Mesh needs to be read enabled. Check Read/Write in import settings.", mfMesh);
+								}
+								ci.mesh = mfMesh;
 							}
 
 							//one way or the other, we set the .mesh property of the CombineInstance to the mesh of our thing, and then add it to a list (below)

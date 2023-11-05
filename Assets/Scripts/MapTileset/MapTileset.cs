@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 
 //todo rename
@@ -24,6 +25,11 @@ namespace MapTileset
 			}
 			
 			return (_defaultPrefab,Quaternion.identity);
+		}
+
+		public GameObject[] GetAllPrefabs()
+		{
+			return _tilePatterns.Select(x => x.Prefab).ToArray();
 		}
 	}
 }
