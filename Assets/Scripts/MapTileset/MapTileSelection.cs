@@ -75,7 +75,6 @@ namespace MapTileset
 				
 				foreach(Vector3Int direction in TestDirections)
 				{
-					var dir = RotatedVector3Int(direction, o);
 					var face = GetFaceForDir(direction);
 
 					if (face == TileNeighbor.Any)
@@ -83,7 +82,9 @@ namespace MapTileset
 						//still valid no matter what...
 						continue;
 					}
-					
+
+					var dir = RotatedVector3Int(direction, o);
+
 					//if dir is in the cache, gets set.
 					if (!_resultCache.TryGetValue(dir, out bool hasNeighbor))
 					{
