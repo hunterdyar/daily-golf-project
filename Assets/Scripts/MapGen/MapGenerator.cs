@@ -158,21 +158,21 @@ namespace MapGen
 			for (int i = 1; i < _generator.teePositions.Count; i++)
 			{
 				var o = Instantiate(TeePrefab, transform);
-				o.transform.position = new Vector3(_generator.teePositions[i].x * scale,
-					GetHeight((tex.GetPixel(_generator.teePositions[i].x, _generator.teePositions[i].y).grayscale)) *
-					scale, _generator.teePositions[i].y * scale);
+				o.transform.position = new Vector3(
+					_generator.teePositions[i].x * scale,
+					GetHeight(tex.GetPixel(_generator.teePositions[i].x, _generator.teePositions[i].y).grayscale)+scale,
+					_generator.teePositions[i].y * scale);
 			}
 
 			//
 			OnGenerationComplete?.Invoke(this);
 		}
 
-		//Generation right now is smooth, from 0 to 1. we block-ify it here.
 		private float GetHeight(float input)
 		{
 			input = Mathf.Clamp01(input);
-			input = Mathf.Round(input * steps) / steps;
-			input = input * scale;
+			input = Mathf.Floor(input * steps) / steps;
+			input = input * steps * scale;
 			return input;
 		}
 
