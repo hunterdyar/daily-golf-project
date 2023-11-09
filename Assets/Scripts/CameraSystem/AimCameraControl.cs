@@ -37,9 +37,9 @@ namespace CameraSystem
 			var aim = _caddy.CurrentStroke.AimDir;
 			_pov.m_HorizontalAxis.Value = Quaternion.LookRotation(aim).eulerAngles.y;
 
-			var height = _cameraOffset.m_Offset.z;
+			var height = _cameraOffset.m_Offset.y;
 			//_caddy.CurrentStroke.inputPower;
-			height = 3;//club.minHeight, club.maxHeight, inputPower.
+			height = 1;//club.minHeight, club.maxHeight, inputPower.
 
 			//idk we'll figure out this later.
 			float pullback = Mathf.Clamp(_caddy.CurrentStroke.inputPower * _caddy.SelectedClub.power / 4, 1, 10);
