@@ -1,7 +1,9 @@
 ﻿using System;
 using Cinemachine;
 using Golf;
+using Unity.Properties;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Utilities.ReadOnlyAttribute;
 
 namespace CameraSystem
@@ -15,11 +17,14 @@ namespace CameraSystem
 		[Header("Camera Config")]
 		//[ReadOnly, SerializeField] private GolfCamera[] _cameras;
 
-		[SerializeField] private CinemachineVirtualCameraBase _aimCamera;
+		[SerializeField] private CinemachineVirtualCamera _aimCamera;
 
-		[SerializeField] private CinemachineVirtualCameraBase _inFlight;
+		[SerializeField] private CinemachineVirtualCamera _inFlight;
 
 		private CinemachineMixingCamera _mixingCam;
+		[SerializeField] private float _aimFlightBlendTime = 0.25f;
+		[SerializeField] private AnimationCurve _aimFlightBlendCurve;
+		private float _aimFlightBlend;
 
 		public virtual void Start()
 		{
@@ -29,27 +34,26 @@ namespace CameraSystem
 		void Update()
 		{
 			//hacky listener pattern until we start subscribing to invents.
-			
-			//set aim 
+			WeightsTick();
+		}
+
+		private void WeightsTick()
+		{
+			int sign = 0;
 			if (_caddy.CurrentStroke.Status == StrokeStatus.Aiming)
 			{
-				_mixingCam.SetWeight(_aimCamera,100);
-				
+				sign = -1;
 			}
-			else
+			else if (_caddy.CurrentStroke.Status == StrokeStatus.InMotion)
 			{
-				_mixingCam.SetWeight(_aimCamera, 0);
+				sign = 1;
 			}
-			
-			//set flight
-			if (_caddy.CurrentStroke.Status == StrokeStatus.InMotion)
-			{
-				_mixingCam.SetWeight(_inFlight, 1);
-			}
-			else
-			{
-				_mixingCam.SetWeight(_inFlight, 0);
-			}
+
+			_aimFlightBlend = Mathf.Clamp01(_aimFlightBlend + sign * Time.deltaTime / _aimFlightBlendTime);
+			float t = _aimFlightBlendCurve.Evaluate(_aimFlightBlend);
+			_mixingCam.SetWeight(_aimCamera, Mathf.Lerp(50, 0, t));
+			_mixingCam.SetWeight(_inFlight, Mathf.Lerp(0, 50, t));
+
 		}
 	}
 }
