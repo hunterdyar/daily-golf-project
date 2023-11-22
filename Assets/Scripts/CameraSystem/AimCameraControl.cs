@@ -12,7 +12,9 @@ namespace CameraSystem
 		[SerializeField] private ActiveGolfConfiguration _caddy;
 		private CinemachinePOV _pov;
 		private CinemachineCameraOffset _cameraOffset;
-		
+		[SerializeField] private float additionalHeight = 0;
+		[SerializeField] private float distanceModifier = 1;
+		[SerializeField] private float heightModifier = 1;
 		private void Awake()
 		{ 
 			var virtualCamera = GetComponent<CinemachineVirtualCamera>();
@@ -35,16 +37,19 @@ namespace CameraSystem
 			// transform.Rotate(Vector3.up,_inputReader.Look.x); 
 
 			var aim = _caddy.CurrentStroke.AimDir;
+			var flatAimDir = new Vector3(aim.x, 0, aim.z).normalized;
 			_pov.m_HorizontalAxis.Value = Quaternion.LookRotation(aim).eulerAngles.y;
 
-			var height = _cameraOffset.m_Offset.y;
+			var height = 4f;
 			//_caddy.CurrentStroke.inputPower;
-			height = 1;//club.minHeight, club.maxHeight, inputPower.
+			height = Mathf.Clamp(_caddy.CurrentStroke.inputPower * _caddy.SelectedClub.power / 4, 1, 10) * heightModifier;
 
 			//idk we'll figure out this later.
-			float pullback = Mathf.Clamp(_caddy.CurrentStroke.inputPower * _caddy.SelectedClub.power / 4, 1, 10);
+			float pullback = Mathf.Clamp(_caddy.CurrentStroke.inputPower * _caddy.SelectedClub.power / 4, 1, 10)*distanceModifier;
 			
-			_cameraOffset.m_Offset = new Vector3(_cameraOffset.m_Offset.x, height, -pullback);
+			//_cameraOffset.m_Offset = new Vector3(_cameraOffset.m_Offset.x, height, -pullback);
+			transform.position = _caddy.CurrentPlayer.transform.position - flatAimDir * pullback +
+			                     Vector3.up * (height * additionalHeight);
 		}
 
 		

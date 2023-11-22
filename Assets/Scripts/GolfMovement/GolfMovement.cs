@@ -12,6 +12,8 @@ namespace Golf
         public Stroke CurrentStroke => _caddy.CurrentStroke;
         public Rigidbody Rigidbody => _rigidbody;
         private Rigidbody _rigidbody;
+
+        public Vector3 Velocity => _rigidbody.velocity;
         public ActiveGolfConfiguration Caddy => _caddy;
         [SerializeField]
         private ActiveGolfConfiguration _caddy;
@@ -85,7 +87,10 @@ namespace Golf
         }
 
         
-
+        /// <summary>
+        /// In this case, out of bounds is off-map. For on-map invalid spaces (in a tree?), a different system will need to be used.
+        /// </summary>
+        /// <returns></returns>
         private bool IsOutOfBounds()
         {
             return transform.position.y < -5f;//todo: settings. other boundaries.
