@@ -135,7 +135,7 @@ namespace MapGen
 			mc.sharedMesh = mesh;
 			combined.name = "World Collider";
 
-			//EnvironmentCOlliders is used by the physics trajectory prediction system, so it knows what objects to clone into it's fake scene.
+			//EnvironmentColliders is used by the physics trajectory prediction system, so it knows what objects to clone into it's fake scene.
 			EnvironmentColliders.Add(mc);
 
 

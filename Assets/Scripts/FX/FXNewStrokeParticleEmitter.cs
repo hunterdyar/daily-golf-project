@@ -25,7 +25,6 @@ public class FXNewStrokeParticleEmitter : MonoBehaviour
 
     private void OnStrokeStatusChange(Stroke stroke, StrokeStatus newStatus)
     {
-        Debug.Log("Stroke Status Change:"+newStatus);
         if (newStatus == StrokeStatus.Aiming)
         {
             //we went from NotTaken to Aiming...
