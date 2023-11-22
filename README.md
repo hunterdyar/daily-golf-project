@@ -68,3 +68,6 @@ Map generation happens in a Generator scriptable Object (generator.cs). This cre
 Tee positions (and player spawn) are done by trying to randomly place non-overlapping circles onto the map on valid locations. We keep trying while decreasing the radius of the circle. It's poisson disk sampling with a search, and I would describe it as "good enough for now". It's slow and could have a tee spawn on an island of just one square.
 
 MapGenerator.cs is a simple script to listen for generation (we can regenerate levels at runtime clicking a button in the inspector, very helpful for testing) that spawns in cubes on a grid.
+
+### Skybox
+I basically used this tutorial: [https://medium.com/@jannik_boysen/procedural-skybox-shader-137f6b0cb77c](https://medium.com/@jannik_boysen/procedural-skybox-shader-137f6b0cb77c). I had to turn off "Cast Shadows" in the graph inspector to get the UV mapping to behave as it does in the older version of Unity used in that tutorial.
