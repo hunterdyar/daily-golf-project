@@ -1049,6 +1049,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4952340592947836565, guid: 4b0f64fbf067d3446b7f2bacddb815e8,
+        type: 3}
+      propertyPath: _simulationTickCount
+      value: 75
+      objectReference: {fileID: 0}
     - target: {fileID: 7068483760454281812, guid: 4b0f64fbf067d3446b7f2bacddb815e8,
         type: 3}
       propertyPath: m_Mesh

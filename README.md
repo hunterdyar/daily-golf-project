@@ -12,7 +12,7 @@ The goal of this game is to use data-oriented design patterns and modular coding
 
 ## System Notes
 ### Golf Ball Movement
-'Stroke' is a [POCO](https://en.wikipedia.org/wiki/Plain_old_CLR_object) that describes a single hit on the golf ball. It's used to store previous hits and edited at runtime. (Caddy scriptable object).CurrentStroke is what the trajectory prediction system is using to figure out what force might get added, for example.
+'Stroke' is a [POCO](https://en.wikipedia.org/wiki/Plain_old_CLR_object) that describes a single hit on the golf ball. It's used to store previous hits and edited at runtime. (Caddy scriptable object). CurrentStroke is what the trajectory prediction system is using to figure out what force might get added, for example.
 
 ## Scriptale Object Organization
 "Active" scriptable objects (ActiveGolfConfiguration, InputReader) are objects used for storing references and accessing objects in the scene, instead of singletons, managers, or other such patterns to solve this problem. There is probably just one of these.
@@ -22,7 +22,7 @@ The goal of this game is to use data-oriented design patterns and modular coding
 The Generator is a little of both. It's basically settings for generation, but it also stores a generation as an image texture sub asset.
 
 ### Input
-Uses new input system. InputActins have a c# class generated, and interfacing with the input actions is done entirely by an InputReader scriptable object. The rest of the project only interfaces with this, which provides convenient actions, process functions, and read-only properties. It keeps the rest of the code agnostic of which input system we are using. It lets us send 'fake' inputs in a non-jank way easily, either with inspector scripts or with public functions. 
+Uses new input system. InputActions have a c# class generated, and interfacing with the input actions is done entirely by an InputReader scriptable object. The rest of the project only interfaces with this, which provides convenient actions, process functions, and read-only properties. It keeps the rest of the code agnostic of which input system we are using. It lets us send 'fake' inputs in a non-jank way easily, either with inspector scripts or with public functions. 
 
 This technique is inspired from Unity's own '[modular game architecture with scriptableobjects](https://resources.unity.com/games/create-modular-game-architecture-with-scriptable-objects-ebook?ungated=true)' ebook ([repo](https://github.com/UnityTechnologies/PaddleGameSO)).
 
@@ -37,7 +37,7 @@ Using a scriptableobject to "wrap" an inputactions has the further advantages.
 
 Disadvantages
 - It's overkill for this project.
-  - a public reference to inputaction assets is certainly fine for a game of this scale.
+  - A public reference to InputAction assets would be fine for a game of this scale.
   - We could do it the same, but provide the data as static actions and floats! I don't use statics because it lets me use multiple scriptable objects to store different settings instances for testing and swapping out easily. Especially useful for a project in source control.
 - Another thing to remember and configure.
 - When we create actions, we have to implement them in the ScriptableObject (since it's an interface for the binding), even ones we don't use.
@@ -52,6 +52,8 @@ in-scene UI is handled by the trajectory prediction system.
 Basically entirelly in a single script/child of the player, GolfHitPreviewLine.cs.
 
 Uses [multi-scene physics](https://docs.unity3d.com/Manual/physics-multi-scene.html) to simulate the balls path and draw a line for each tick of that simulation. See the [TNTC](https://www.youtube.com/watch?v=4VUmhuhkELk) video for a breakdown of the technique.
+
+![Preview trajectory updating in real time](/Documentation/preview.gif)
 
 ### Camera Control
 CameraSystem is a state machine. GolfCamera is the base class for a state. Actual camera switching is done via Cinemachine, changing the priority of the cameras, to use their blends.
@@ -69,5 +71,17 @@ Tee positions (and player spawn) are done by trying to randomly place non-overla
 
 MapGenerator.cs is a simple script to listen for generation (we can regenerate levels at runtime clicking a button in the inspector, very helpful for testing) that spawns in cubes on a grid.
 
+### Map Tileset
+
+There are two major tricks on display in the MapTileset. The first is obvious, the custom inspector. It's neat, but really just enough to do the job. Architecturally, the main trick used for modular development is a delegate. The Map Tileset's job is to tell us which prefab to spawn as a convenient ScriptableObject. To do this, it would need to know how we are saving map data, so it give it the map, and it can parse that to find the neighbors. 
+
+Instead, we use a delegate, a function we can pass in as an argument. This one is called 'NeighborTest'. So the tileset object here is written independently from how the map data is stored. We could re-write the way map data is stored entirely without having to worry about this prefab picking system at all. 
+
+![Map Tilset custom inspector screenshot](/Documentation/map_tileset.png)
+
+The way the MapTileset works is as a series of rules, which it checks in order, looking for the first appropriate one. The rule describes what the spaces neighbors can be.
+
 ### Skybox
+Not an architecture note, but for the curious:
+
 I basically used this tutorial: [https://medium.com/@jannik_boysen/procedural-skybox-shader-137f6b0cb77c](https://medium.com/@jannik_boysen/procedural-skybox-shader-137f6b0cb77c). I had to turn off "Cast Shadows" in the graph inspector to get the UV mapping to behave as it does in the older version of Unity used in that tutorial.

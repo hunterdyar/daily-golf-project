@@ -35,6 +35,8 @@ namespace Golf
 		private Vector3 lastRefactoredPosition;
 		private List<Collider> _simulatedEnvironmentObjects = new List<Collider>();
 
+		private Vector3 _previewFirstHitLocation;
+		private int _simCount;
 		
 		//cache
 		private Vector3 _previousSimulatedForce;
@@ -144,7 +146,6 @@ namespace Golf
 		private bool ShouldDrawDisplay()
 		{
 			//we can check the camera system to make sure it's not wrong either.
-
 			return (_golfMovement.CurrentStroke.Status != StrokeStatus.InMotion);//also check aiming so we don't draw during ball drop.
 		}
 
@@ -153,6 +154,7 @@ namespace Golf
 		{
 			UpdateTrajectory();
 		}
+
 		private void UpdateTrajectory()
 		{
 			_simulatedBall.transform.position = _golfMovement.transform.position;
@@ -165,18 +167,22 @@ namespace Golf
 			Vector3 simulationForce = _golfMovement.CurrentStroke.GetForce();
 			//don't sim unless something changes with the force, or if something in the environment moves... what are other edge cases to consider triggers to keep this accurate?
 			bool simulationNeeded = simulationForce != _previousSimulatedForce || lastRefactoredPosition != _golfMovement.transform.position;
+			//
+
 			if (simulationNeeded)
 			{
+				_simCount = 0;
 				_simulatedRB.AddForce(simulationForce, ForceMode.Impulse);
 
 				for (int i = 1; i < _simulationTickCount; i++)
 				{
-					_simulation.Simulate(Time.fixedDeltaTime);
+					_simulation.Simulate(Time.fixedDeltaTime*2);
 					_previewPoints[i] = _simulatedBall.transform.position;
 				}
 
 				_lineRenderer.SetPositions(_previewPoints);
 				_previousSimulatedForce = simulationForce;
+				_simCount++;
 			}
 
 			lastRefactoredPosition = _golfMovement.transform.position;
