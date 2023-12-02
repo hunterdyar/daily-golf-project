@@ -7,14 +7,15 @@ The goal of this game is to use data-oriented design patterns and modular coding
 
 ## Game Architecture Patterns Being Used
 - Data-Oriented Design. Primarily through storing game data in ScriptableObjets. See the [still-relevant 2017 Unite talk from Ryan Hipple](https://www.youtube.com/watch?v=raQ3iHhE_Kk).
-- Actions. Using events ([static](https://guidebook.hdyar.com/docs/programming/advanced/static-objects-and-unity/) or on scriptableObjects) to decouple dependencies. See my [Event Systems in Unity](https://guidebook.hdyar.com/docs/programming/architecture/event-systems/) page.
+- Actions. Using events ([static](https://guidebook.hdyar.com/docs/programming/advanced/static-objects-and-unity/) or on ScriptableObjects) to decouple dependencies. See my [Event Systems in Unity](https://guidebook.hdyar.com/docs/programming/architecture/event-systems/) page.
 - Extension Methods. Great for reusability, but also great for plain old readability. e.g. [self-documenting](https://en.wikipedia.org/wiki/Self-documenting_code) code.
+- Delegates. Keep one system ignorant of the inner workings of another system using functions-as-parameters.
 
 ## System Notes
 ### Golf Ball Movement
 'Stroke' is a [POCO](https://en.wikipedia.org/wiki/Plain_old_CLR_object) that describes a single hit on the golf ball. It's used to store previous hits and edited at runtime. (Caddy scriptable object). CurrentStroke is what the trajectory prediction system is using to figure out what force might get added, for example.
 
-## Scriptale Object Organization
+## Scriptable Object Organization
 "Active" scriptable objects (ActiveGolfConfiguration, InputReader) are objects used for storing references and accessing objects in the scene, instead of singletons, managers, or other such patterns to solve this problem. There is probably just one of these.
 
 "Game Data" scriptable objects (Clubs), on the other hand, is just data. Settings, etc.
